@@ -1,7 +1,7 @@
 import db from "@/utils/mysql";
 import { parse } from "csv-parse";
 
-export async function GET(request: Request) {
+export async function GET() {
   db.query("SELECT * FROM `payment_method`", (err, result) => {
     console.log(result, "<<< cek");
   });
@@ -11,7 +11,7 @@ export async function GET(request: Request) {
   });
 }
 
-export const POST = async (req, res) => {
+export const POST = async (req: Request) => {
   try {
     const formData = await req.formData();
 
