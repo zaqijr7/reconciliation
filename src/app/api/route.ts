@@ -16,7 +16,7 @@ export const POST = async (req: Request) => {
     const formData = await req.formData();
 
     const file = formData.get("file");
-    const getSourcePayment = formData.get("source_payment");
+    // const getSourcePayment = formData.get("source_payment");
 
     if (!file) {
       return new Response(JSON.stringify({ error: "No files received." }), {
