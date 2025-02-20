@@ -73,21 +73,21 @@ const dataTable: {
     idSourceCategory: "pos",
     subTransaction: [],
   },
-  {
-    transactionForm: "Cash",
-    idSourceCategory: "cash",
-    subTransaction: [],
-  },
-  {
-    transactionForm: "Credit Card",
-    idSourceCategory: "credit_card",
-    subTransaction: listBank("credit_card"),
-  },
-  {
-    transactionForm: "Debit Card",
-    idSourceCategory: "debit_card",
-    subTransaction: listBank("debit_card"),
-  },
+  // {
+  //   transactionForm: "Cash",
+  //   idSourceCategory: "cash",
+  //   subTransaction: [],
+  // },
+  // {
+  //   transactionForm: "Credit Card",
+  //   idSourceCategory: "credit_card",
+  //   subTransaction: listBank("credit_card"),
+  // },
+  // {
+  //   transactionForm: "Debit Card",
+  //   idSourceCategory: "debit_card",
+  //   subTransaction: listBank("debit_card"),
+  // },
   {
     transactionForm: "E-Wallet",
     idSourceCategory: "e_wallet",

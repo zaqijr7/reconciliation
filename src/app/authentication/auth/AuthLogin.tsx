@@ -76,6 +76,9 @@ const AuthLogin = ({ title, subtitle, subtext }: loginType) => (
         component={Link}
         href="/"
         type="submit"
+        sx={{
+          color: "white",
+        }}
       >
         Sign In
       </Button>

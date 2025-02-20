@@ -60,6 +60,9 @@ const Header = ({ toggleMobileSidebar }: ItemType) => {
             href="/authentication/login"
             disableElevation
             color="primary"
+            sx={{
+              color: "white",
+            }}
           >
             Login
           </Button>

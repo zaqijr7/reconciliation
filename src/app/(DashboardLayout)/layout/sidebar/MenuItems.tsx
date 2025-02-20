@@ -1,8 +1,4 @@
-import {
-  IconCopy,
-  IconLayoutDashboard,
-  IconTypography,
-} from "@tabler/icons-react";
+import { IconLayoutDashboard, IconTypography } from "@tabler/icons-react";
 
 import { uniqueId } from "lodash";
 
@@ -24,15 +20,9 @@ const Menuitems = [
   },
   {
     id: uniqueId(),
-    title: "Incoming",
+    title: "Sales",
     icon: IconTypography,
     href: "/incoming",
-  },
-  {
-    id: uniqueId(),
-    title: "Upcoming",
-    icon: IconCopy,
-    href: "/upcoming",
   },
 ];
 
