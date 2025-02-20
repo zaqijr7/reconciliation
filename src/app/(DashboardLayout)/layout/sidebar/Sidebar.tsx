@@ -1,6 +1,8 @@
-import { useMediaQuery, Box, Drawer } from "@mui/material";
+import { useMediaQuery, Box, Drawer, Stack } from "@mui/material";
 import SidebarItems from "./SidebarItems";
-import { Sidebar, Logo } from "react-mui-sidebar";
+import { Sidebar } from "react-mui-sidebar";
+import Image from "next/image";
+import { baselightTheme } from "@/utils/theme/DefaultColors";
 
 interface ItemType {
   isMobileSidebarOpen: boolean;
@@ -62,14 +64,26 @@ const MSidebar = ({
               width={"270px"}
               collapsewidth="80px"
               open={isSidebarOpen}
-              themeColor="#5d87ff"
+              themeColor={baselightTheme.palette.primary.main}
               themeSecondaryColor="#49beff"
               showProfile={false}
             >
               {/* ------------------------------------------- */}
               {/* Logo */}
               {/* ------------------------------------------- */}
-              <Logo img="/images/logos/dark-logo.svg" />
+              <Stack
+                justifyContent={"center"}
+                alignItems={"center"}
+                paddingY={2}
+              >
+                <Image
+                  src="/images/logos/dark-logo.jpeg"
+                  alt="logo"
+                  height={70}
+                  width={174}
+                  priority
+                />
+              </Stack>
               <Box>
                 {/* ------------------------------------------- */}
                 {/* Sidebar Items */}
@@ -106,14 +120,22 @@ const MSidebar = ({
           isCollapse={false}
           mode="light"
           direction="ltr"
-          themeColor="#5d87ff"
+          themeColor={baselightTheme.palette.primary.main}
           themeSecondaryColor="#49beff"
           showProfile={false}
         >
           {/* ------------------------------------------- */}
           {/* Logo */}
           {/* ------------------------------------------- */}
-          <Logo img="/images/logos/dark-logo.svg" />
+          <Stack justifyContent={"center"} alignItems={"center"} paddingY={2}>
+            <Image
+              src="/images/logos/dark-logo.jpeg"
+              alt="logo"
+              height={70}
+              width={174}
+              priority
+            />
+          </Stack>
           {/* ------------------------------------------- */}
           {/* Sidebar Items */}
           {/* ------------------------------------------- */}

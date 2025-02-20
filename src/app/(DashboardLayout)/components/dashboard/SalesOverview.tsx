@@ -14,8 +14,7 @@ const SalesOverview = () => {
 
   // chart color
   const theme = useTheme();
-  const primary = theme.palette.primary.main;
-  const secondary = theme.palette.secondary.main;
+  const primary = theme.palette.primary;
 
   // chart
   const optionscolumnchart: any = {
@@ -28,7 +27,7 @@ const SalesOverview = () => {
       },
       height: 370,
     },
-    colors: [primary, secondary],
+    colors: [...Object.values(primary)],
     plotOptions: {
       bar: {
         horizontal: false,
