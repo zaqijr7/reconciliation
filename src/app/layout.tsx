@@ -6,11 +6,14 @@ import CssBaseline from "@mui/material/CssBaseline";
 import "./global.css";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
+const queryClient = new QueryClient();
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode;
+  readonly children: React.ReactNode;
 }) {
   return (
     <html lang="en">
@@ -19,7 +22,9 @@ export default function RootLayout({
           {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
           <CssBaseline />
           <LocalizationProvider dateAdapter={AdapterMoment}>
-            {children}
+            <QueryClientProvider client={queryClient}>
+              {children}
+            </QueryClientProvider>
           </LocalizationProvider>
         </ThemeProvider>
       </body>

@@ -31,7 +31,7 @@ export default function RootLayout({
 }) {
   const [isSidebarOpen, setSidebarOpen] = useState(true);
   const [isMobileSidebarOpen, setMobileSidebarOpen] = useState(false);
-  const isSalesPage = usePathname().includes("incoming");
+  const isSalesPage = usePathname().includes("sales");
 
   return (
     <MainWrapper className="mainwrapper">
@@ -70,20 +70,16 @@ export default function RootLayout({
           {/* End Page */}
           {/* ------------------------------------------- */}
         </Container>
-        {isSalesPage && (
-          <div className="tw-w-full tw-fixed tw-bottom-0 tw-p-5 tw-bg-white flex tw-items-end tw-shadow-2xl">
-            <div className="tw-bg-red-500 tw-inline">
-              <Button
-                color="primary"
-                variant="contained"
-                sx={{ color: "white" }}
-              >
-                Submit
-              </Button>
-            </div>
-          </div>
-        )}
       </PageWrapper>
+      {isSalesPage && (
+        <div className="tw-fixed tw-w-full tw-bottom-0 tw-p-5 tw-bg-white tw-shadow-2xl tw-border-t tw-z-20">
+          <div className="tw-flex tw-items-center tw-justify-end">
+            <Button color="primary" variant="contained" sx={{ color: "white" }}>
+              Submit
+            </Button>
+          </div>
+        </div>
+      )}
     </MainWrapper>
   );
 }

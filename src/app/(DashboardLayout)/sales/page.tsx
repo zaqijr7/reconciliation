@@ -1,35 +1,15 @@
 "use client";
-import {
-  Backdrop,
-  Box,
-  Fade,
-  Modal,
-  Stack,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-  TextField,
-  Typography,
-} from "@mui/material";
+
 import PageContainer from "@/app/(DashboardLayout)/components/container/PageContainer";
 import DashboardCard from "@/app/(DashboardLayout)/components/shared/DashboardCard";
-import { DatePicker } from "@mui/x-date-pickers";
-import moment from "moment";
-import { useState } from "react";
 import TableTransactions from "./components/TableTransactions";
-
-const listBank = (idParent: string) => [
-  { idSourceCategory: idParent, paymentSource: "BRI", paymentId: "BRI" },
-  { idSourceCategory: idParent, paymentSource: "BCA", paymentId: "BCA" },
-  { idSourceCategory: idParent, paymentSource: "BNI", paymentId: "BNI" },
-  {
-    idSourceCategory: idParent,
-    paymentSource: "MANDIRI",
-    paymentId: "MANDIRI",
-  },
-];
+import BranchAndDateInput from "./components/BranchAndDateInput";
+import { useMutation } from "@tanstack/react-query";
+import fetchApi from "@/utils/fetchApi";
+import { GetListBranchType } from "../../../types/apiTypes";
+import { AxiosResponse } from "axios";
+import { ReactNode, useEffect, useState } from "react";
+import { SelectChangeEvent } from "@mui/material";
 
 const listEcommerce = (idSourceCategory: string) => [
   {
@@ -100,69 +80,25 @@ const dataTable: {
   },
 ];
 
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 400,
-  maxHeight: "80vh",
-  overflowY: "auto",
-  bgcolor: "background.paper",
-  border: "2px solid #000",
-  boxShadow: 24,
-  p: 4,
-};
+// const style = {
+//   position: "absolute",
+//   top: "50%",
+//   left: "50%",
+//   transform: "translate(-50%, -50%)",
+//   width: 400,
+//   maxHeight: "80vh",
+//   overflowY: "auto",
+//   bgcolor: "background.paper",
+//   border: "2px solid #000",
+//   boxShadow: 24,
+//   p: 4,
+// };
 
-const SamplePage = () => {
-  const [open, setOpen] = useState(false);
-  const [openModalCash, setOpenModalCash] = useState(false);
-  const [openModalDebitCard, setOpenModalDebitCard] = useState(false);
-  const [sourceSelected, setSourceSelected] = useState({ key: "", source: "" });
-  const [totalCash, setTotalCash] = useState([
-    {
-      nominalCash: 100000,
-      totalItem: 0,
-    },
-    {
-      nominalCash: 50000,
-      totalItem: 0,
-    },
-    {
-      nominalCash: 20000,
-      totalItem: 0,
-    },
-    {
-      nominalCash: 10000,
-      totalItem: 0,
-    },
-    {
-      nominalCash: 5000,
-      totalItem: 0,
-    },
-    {
-      nominalCash: 2000,
-      totalItem: 0,
-    },
-    {
-      nominalCash: 1000,
-      totalItem: 0,
-    },
-    {
-      nominalCash: 500,
-      totalItem: 0,
-    },
-    {
-      nominalCash: 200,
-      totalItem: 0,
-    },
-    {
-      nominalCash: 100,
-      totalItem: 0,
-    },
-  ]);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+const Sales = () => {
+  const [listBranch, setListBranch] = useState<
+    { branchId: string; branchName: string }[] | []
+  >([]);
+  const [branchSelected, setBranchSelected] = useState("");
 
   const handleUploadFile = (key: string) => {
     const input = document.createElement("input");
@@ -178,7 +114,7 @@ const SamplePage = () => {
       formData.append("file", file);
       formData.append("source_payment", key);
 
-      fetch("/api", {
+      fetch("/upload/file", {
         method: "POST",
         body: formData,
       })
@@ -191,56 +127,51 @@ const SamplePage = () => {
     document.body.removeChild(input);
   };
 
-  const handleEditTransaction = ({
-    key,
-    source,
-  }: {
-    key: string;
-    source: string;
-  }) => {
-    switch (key) {
-      case "cash": {
-        setOpenModalCash(true);
-        break;
+  const getListBranch = useMutation({
+    mutationFn: async (): Promise<AxiosResponse<GetListBranchType, any>> => {
+      const api = await fetchApi();
+      return api.post("/branch/list", {});
+    },
+    onSuccess: (response) => {
+      if (response.data.result === 200) {
+        setListBranch(response.data.payload);
+        setBranchSelected(response.data.payload[0].branchId);
+        return;
       }
-      case "credit_card": {
-        setOpenModalDebitCard(true);
-        break;
-      }
-      case "debit_card": {
-        setOpenModalDebitCard(true);
-        break;
-      }
-      default:
-        break;
-    }
-    setSourceSelected({ key, source });
+      throw new Error();
+    },
+    onError: () => {
+      setListBranch([]);
+    },
+  });
+
+  const handleSelectedBranch = (
+    value: SelectChangeEvent<string>,
+    child: ReactNode,
+  ) => {
+    setBranchSelected(value.target.value);
   };
 
+  useEffect(() => {
+    getListBranch.mutate();
+  }, []);
+
   return (
-    <PageContainer title="Incoming" description="this is Sample page">
-      <DashboardCard title="Incoming">
+    <PageContainer title="Sales" description="this is Sample page">
+      <DashboardCard title="Sales">
         <>
-          <Stack sx={{ display: "block" }}>
-            <DatePicker
-              label="Pilih Tanggal"
-              value={moment(Date.now())}
-              sx={{
-                borderColor: "divider",
-                marginBottom: 3,
-              }}
-            />
-          </Stack>
+          <BranchAndDateInput
+            listBranch={listBranch}
+            branchSelected={branchSelected}
+            handleSelectBranch={handleSelectedBranch}
+          />
           <TableTransactions
             dataTable={dataTable}
-            handleDetail={handleOpen}
             handleUpload={handleUploadFile}
-            handleDelete={() => ""}
-            handleEdit={handleEditTransaction}
           />
         </>
       </DashboardCard>
-      <div>
+      {/* <div>
         <Modal
           aria-labelledby="transition-modal-title"
           aria-describedby="transition-modal-description"
@@ -380,6 +311,7 @@ const SamplePage = () => {
           </Fade>
         </Modal>
       </div>
+
       <div>
         <Modal
           aria-labelledby="modal-bank"
@@ -489,9 +421,9 @@ const SamplePage = () => {
             </Box>
           </Fade>
         </Modal>
-      </div>
+      </div> */}
     </PageContainer>
   );
 };
 
-export default SamplePage;
+export default Sales;

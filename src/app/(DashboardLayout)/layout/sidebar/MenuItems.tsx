@@ -22,7 +22,7 @@ const Menuitems = [
     id: uniqueId(),
     title: "Sales",
     icon: IconTypography,
-    href: "/incoming",
+    href: "/sales",
   },
 ];
 
