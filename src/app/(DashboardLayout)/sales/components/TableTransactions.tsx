@@ -9,21 +9,14 @@ import {
 import RowTblHeadTransaction from "./RowTblHeadTransaction";
 import RowTblDataTransaction from "./RowTblDataTransaction";
 import RowSubTblTransaction from "./RowSubTblTransaction";
+import { PaymentSource, PaymentType } from "@/types/apiTypes";
 
 const TableTransactions = ({
   dataTable,
   handleUpload,
 }: {
-  dataTable: {
-    transactionForm: string;
-    idSourceCategory: string;
-    subTransaction: {
-      idSourceCategory: string;
-      paymentSource: string;
-      paymentId: string;
-    }[];
-  }[];
-  handleUpload: (key: string) => void;
+  dataTable: PaymentType[];
+  handleUpload: (payload: PaymentSource & { paymentType: string }) => void;
 }) => {
   return (
     <Table aria-label="collapsible table">
@@ -32,36 +25,41 @@ const TableTransactions = ({
       </TableHead>
       <TableBody>
         {dataTable.map((item) => {
-          if (item.subTransaction?.length > 0) {
+          if (item.paymentType === "POS") {
+            return (
+              <RowTblDataTransaction
+                data={{
+                  ...item.paymentSources[0],
+                  paymentType: item.paymentType,
+                }}
+                handleUpload={handleUpload}
+                key={item.paymentType}
+              />
+            );
+          }
+
+          if (item.paymentSources?.length > 0) {
             return (
               <>
-                <TableRow key={item.idSourceCategory}>
+                <TableRow key={item.paymentType}>
                   <TableCell>
                     <Typography variant="subtitle2" fontWeight={600}>
-                      {item.transactionForm}
+                      {item.paymentType}
                     </Typography>
                   </TableCell>
                   <TableCell align="right" />
                   <TableCell align="right" />
                 </TableRow>
-                {item.subTransaction.map((item) => (
+                {item.paymentSources.map((payment) => (
                   <RowSubTblTransaction
-                    data={item}
+                    data={{ ...payment, paymentType: item.paymentType }}
                     handleUpload={handleUpload}
-                    key={item.idSourceCategory}
+                    key={payment.paymentMethodId}
                   />
                 ))}
               </>
             );
           }
-
-          return (
-            <RowTblDataTransaction
-              data={item}
-              handleUpload={handleUpload}
-              key={item.idSourceCategory}
-            />
-          );
         })}
       </TableBody>
     </Table>

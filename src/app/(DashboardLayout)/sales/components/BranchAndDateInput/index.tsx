@@ -14,6 +14,8 @@ const BranchAndDateInput = ({
   listBranch,
   branchSelected,
   handleSelectBranch,
+  handleSetDate,
+  dateSelected,
 }: {
   listBranch: {
     branchId: string;
@@ -24,12 +26,15 @@ const BranchAndDateInput = ({
     value: SelectChangeEvent<string>,
     child: ReactNode,
   ) => void;
+  handleSetDate: (date: moment.Moment | null) => void;
+  dateSelected: moment.Moment | null;
 }) => {
   return (
     <Stack sx={{ display: "block" }}>
       <DatePicker
         label="Pilih Tanggal"
-        value={moment(Date.now())}
+        onChange={(e) => handleSetDate(e)}
+        value={dateSelected}
         sx={{
           borderColor: "divider",
           marginBottom: 3,

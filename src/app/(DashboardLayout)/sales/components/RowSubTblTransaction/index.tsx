@@ -1,23 +1,20 @@
 import { TableCell, TableRow, Typography, useTheme } from "@mui/material";
 import React from "react";
 import CellAction from "../CellAction";
+import { PaymentSource } from "@/types/apiTypes";
 
 const RowSubTblTransaction = ({
   data,
   handleUpload,
 }: {
-  data: {
-    idSourceCategory: string;
-    paymentSource: string;
-    paymentId: string;
-  };
-  handleUpload: (key: string) => void;
+  data: PaymentSource & { paymentType: string };
+  handleUpload: (payload: PaymentSource & { paymentType: string }) => void;
 }) => {
   const theme = useTheme();
 
   return (
     <TableRow
-      key={data.paymentId}
+      key={data.paymentMethodId}
       sx={{
         "&:hover": {
           backgroundColor: theme.palette.grey[50],
@@ -26,13 +23,13 @@ const RowSubTblTransaction = ({
       }}
     >
       <TableCell sx={{ paddingLeft: 10 }}>
-        <Typography variant="body1">{data.paymentSource}</Typography>
+        <Typography variant="body1">{data.paymentName}</Typography>
       </TableCell>
       <TableCell align="right" />
       <TableCell align="center">
         <CellAction
-          handleUpload={() => handleUpload(data.paymentId)}
-          categoryPayment={data.idSourceCategory}
+          handleUpload={() => handleUpload(data)}
+          categoryPayment={data.paymentMethodId}
         />
       </TableCell>
     </TableRow>

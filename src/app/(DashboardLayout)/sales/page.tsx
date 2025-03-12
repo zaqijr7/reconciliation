@@ -6,79 +6,18 @@ import TableTransactions from "./components/TableTransactions";
 import BranchAndDateInput from "./components/BranchAndDateInput";
 import { useMutation } from "@tanstack/react-query";
 import fetchApi from "@/utils/fetchApi";
-import { GetListBranchType } from "../../../types/apiTypes";
+import {
+  GetListBranchType,
+  GetListPaymentMehtodType,
+  PaymentSource,
+  PaymentTransactionPayload,
+  PaymentTransactionResponse,
+  PaymentType,
+} from "@/types/apiTypes";
 import { AxiosResponse } from "axios";
-import { ReactNode, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { SelectChangeEvent } from "@mui/material";
-
-const listEcommerce = (idSourceCategory: string) => [
-  {
-    idSourceCategory,
-    paymentSource: "Go Food",
-    paymentId: "GoFood",
-  },
-  {
-    idSourceCategory,
-    paymentSource: "Grab Food",
-    paymentId: "GrabFood",
-  },
-  {
-    idSourceCategory,
-    paymentSource: "Shopee Food",
-    paymentId: "ShopeeFood",
-  },
-];
-
-const listEwallet = (idSourceCategory: string) => [
-  { idSourceCategory, paymentSource: "Gopay", paymentId: "Gopay" },
-  { idSourceCategory, paymentSource: "OVO", paymentId: "OVO" },
-  {
-    idSourceCategory,
-    paymentSource: "Shopee Pay",
-    paymentId: "ShopeePay",
-  },
-];
-
-const dataTable: {
-  transactionForm: string;
-  idSourceCategory: string;
-  subTransaction: {
-    idSourceCategory: string;
-    paymentSource: string;
-    paymentId: string;
-  }[];
-}[] = [
-  {
-    transactionForm: "POS",
-    idSourceCategory: "pos",
-    subTransaction: [],
-  },
-  // {
-  //   transactionForm: "Cash",
-  //   idSourceCategory: "cash",
-  //   subTransaction: [],
-  // },
-  // {
-  //   transactionForm: "Credit Card",
-  //   idSourceCategory: "credit_card",
-  //   subTransaction: listBank("credit_card"),
-  // },
-  // {
-  //   transactionForm: "Debit Card",
-  //   idSourceCategory: "debit_card",
-  //   subTransaction: listBank("debit_card"),
-  // },
-  {
-    transactionForm: "E-Wallet",
-    idSourceCategory: "e_wallet",
-    subTransaction: listEwallet("e_wallet"),
-  },
-  {
-    transactionForm: "E-Commerce",
-    idSourceCategory: "e_commerce",
-    subTransaction: listEcommerce("e_commerce"),
-  },
-];
+import moment from "moment";
 
 // const style = {
 //   position: "absolute",
@@ -98,34 +37,70 @@ const Sales = () => {
   const [listBranch, setListBranch] = useState<
     { branchId: string; branchName: string }[] | []
   >([]);
+  const [listPaymentMethod, setListPaymentMethod] = useState<
+    PaymentType[] | []
+  >([]);
+  const [transactionHistory, setTransactionHistory] =
+    useState<PaymentTransactionPayload | null>(null);
   const [branchSelected, setBranchSelected] = useState("");
+  const [dateSelected, setDateSelected] = useState<moment.Moment | null>(null);
 
-  const handleUploadFile = (key: string) => {
+  const handleUploadFile = (
+    payload: PaymentSource & { paymentType: string },
+  ) => {
     const input = document.createElement("input");
+
     input.type = "file";
-    input.accept = ".csv";
+    input.accept = ".xlsx";
     input.style.display = "none";
 
-    input.addEventListener("change", (event) => {
+    input.addEventListener("change", () => {
       const file = input.files?.length ? input.files[0] : null;
       if (!file) return;
-
-      const formData = new FormData();
-      formData.append("file", file);
-      formData.append("source_payment", key);
-
-      fetch("/upload/file", {
-        method: "POST",
-        body: formData,
-      })
-        .then((response) => response.json())
-        .then((data) => console.log(data))
-        .catch((error) => console.error(error));
+      uploadFile.mutate({ payload, file });
     });
+
     document.body.appendChild(input);
     input.click();
     document.body.removeChild(input);
   };
+
+  const uploadFile = useMutation({
+    mutationFn: async ({
+      payload,
+      file,
+    }: {
+      payload: PaymentSource & { paymentType: string };
+      file: File;
+    }): Promise<AxiosResponse<GetListBranchType, any>> => {
+      const api = await fetchApi();
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append(
+        "jsonData",
+        JSON.stringify({
+          pmId: payload.paymentMethodId,
+          branchId: branchSelected,
+          transDate: moment(dateSelected).format("YYYY-MM-DD"),
+          paymentType: payload.paymentType,
+        }),
+      );
+
+      return api.post("/upload/file", formData);
+    },
+    onSuccess: (response) => {
+      console.log(response, "<<< yeay berhasil upload");
+    },
+    onError: (error) => {
+      console.log(error, "<< ini error upload file");
+    },
+    onSettled: () => {
+      getTransactionHistory.mutate({
+        transDate: moment(dateSelected).format("YYYY-MM-DD"),
+        branchId: branchSelected,
+      });
+    },
+  });
 
   const getListBranch = useMutation({
     mutationFn: async (): Promise<AxiosResponse<GetListBranchType, any>> => {
@@ -145,16 +120,64 @@ const Sales = () => {
     },
   });
 
-  const handleSelectedBranch = (
-    value: SelectChangeEvent<string>,
-    child: ReactNode,
-  ) => {
+  const getListPaymentMethod = useMutation({
+    mutationFn: async (): Promise<
+      AxiosResponse<GetListPaymentMehtodType, any>
+    > => {
+      const api = await fetchApi();
+      return api.post("/payment/list", {});
+    },
+    onSuccess: (response) => {
+      if (response.data.result === 200) {
+        setListPaymentMethod(response.data.payload.listPayment);
+        return;
+      }
+      throw new Error();
+    },
+    onError: () => {
+      setListPaymentMethod([]);
+    },
+  });
+
+  const getTransactionHistory = useMutation({
+    mutationFn: async ({
+      transDate,
+      branchId,
+    }: {
+      transDate: string;
+      branchId: string;
+    }): Promise<AxiosResponse<PaymentTransactionResponse, any>> => {
+      const api = await fetchApi();
+      return api.post("/branch/transactions", { transDate, branchId });
+    },
+    onSuccess: (response) => {
+      if (response.data.result === 200) {
+        setTransactionHistory(response.data.payload);
+      } else throw new Error();
+    },
+    onError: () => {
+      setTransactionHistory(null);
+    },
+  });
+
+  const handleSelectedBranch = (value: SelectChangeEvent<string>) => {
     setBranchSelected(value.target.value);
   };
 
   useEffect(() => {
     getListBranch.mutate();
+    getListPaymentMethod.mutate();
+    setDateSelected(moment(Date.now()));
   }, []);
+
+  useEffect(() => {
+    if (dateSelected && branchSelected) {
+      getTransactionHistory.mutate({
+        transDate: moment(dateSelected).format("YYYY-MM-DD"),
+        branchId: branchSelected,
+      });
+    }
+  }, [dateSelected, branchSelected]);
 
   return (
     <PageContainer title="Sales" description="this is Sample page">
@@ -164,9 +187,11 @@ const Sales = () => {
             listBranch={listBranch}
             branchSelected={branchSelected}
             handleSelectBranch={handleSelectedBranch}
+            dateSelected={dateSelected}
+            handleSetDate={setDateSelected}
           />
           <TableTransactions
-            dataTable={dataTable}
+            dataTable={listPaymentMethod}
             handleUpload={handleUploadFile}
           />
         </>
