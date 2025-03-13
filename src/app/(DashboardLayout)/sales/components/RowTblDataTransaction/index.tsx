@@ -6,9 +6,13 @@ import { PaymentSource } from "@/types/apiTypes";
 const RowTblDataTransaction = ({
   data,
   handleUpload,
+  isLoading,
+  paymentSelected,
 }: {
   data: PaymentSource & { paymentType: string };
   handleUpload: (payload: PaymentSource & { paymentType: string }) => void;
+  isLoading: boolean;
+  paymentSelected: string;
 }) => {
   const theme = useTheme();
 
@@ -32,6 +36,8 @@ const RowTblDataTransaction = ({
         <CellAction
           handleUpload={() => handleUpload(data)}
           categoryPayment={data.paymentMethodId}
+          isLoading={isLoading}
+          paymentSelected={paymentSelected}
         />
       </TableCell>
     </TableRow>

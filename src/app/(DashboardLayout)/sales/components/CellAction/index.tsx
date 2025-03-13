@@ -1,16 +1,20 @@
 import { Edit, Upload } from "@mui/icons-material";
-import { Button, Stack } from "@mui/material";
+import { Button, CircularProgress, Stack } from "@mui/material";
 import React from "react";
 
 const CellAction = ({
   handleUpload,
   categoryPayment,
+  isLoading,
+  paymentSelected,
   // handleEdit,
   // handleDelete,
   // handleDetail,
 }: {
   handleUpload: () => void;
   categoryPayment: string;
+  isLoading: boolean;
+  paymentSelected: string;
   // handleEdit: () => void;
   // handleDelete: () => void;
   // handleDetail: () => void;
@@ -22,8 +26,16 @@ const CellAction = ({
       categoryPayment !== "debit_card"
     ) {
       return (
-        <Button onClick={handleUpload}>
-          <Upload color="primary" />
+        <Button
+          onClick={() => {
+            handleUpload();
+          }}
+        >
+          {isLoading === true && paymentSelected === categoryPayment ? (
+            <CircularProgress size={20} />
+          ) : (
+            <Upload color="primary" />
+          )}
         </Button>
       );
     }

@@ -15,9 +15,10 @@ import {
   PaymentType,
 } from "@/types/apiTypes";
 import { AxiosResponse } from "axios";
-import { useEffect, useState } from "react";
+import { Ref, useEffect, useRef, useState } from "react";
 import { SelectChangeEvent } from "@mui/material";
 import moment from "moment";
+import SnackbarBox, { SnackbarBoxRef } from "../components/common/SnackBar";
 
 // const style = {
 //   position: "absolute",
@@ -40,6 +41,8 @@ const Sales = () => {
   const [listPaymentMethod, setListPaymentMethod] = useState<
     PaymentType[] | []
   >([]);
+  const snackBarRef = useRef<SnackbarBoxRef>();
+
   const [transactionHistory, setTransactionHistory] =
     useState<PaymentTransactionPayload | null>(null);
   const [branchSelected, setBranchSelected] = useState("");
@@ -90,6 +93,10 @@ const Sales = () => {
     },
     onSuccess: (response) => {
       console.log(response, "<<< yeay berhasil upload");
+      snackBarRef.current?.showSnackbar({
+        open: true,
+        message: "Berhasil Upload File !",
+      });
     },
     onError: (error) => {
       console.log(error, "<< ini error upload file");
@@ -193,9 +200,12 @@ const Sales = () => {
           <TableTransactions
             dataTable={listPaymentMethod}
             handleUpload={handleUploadFile}
+            paymentSelected={uploadFile.variables?.payload.paymentMethodId}
+            isLoading={uploadFile.isPending || getTransactionHistory.variables}
           />
         </>
       </DashboardCard>
+      <SnackbarBox ref={snackBarRef as Ref<SnackbarBoxRef>} />
       {/* <div>
         <Modal
           aria-labelledby="transition-modal-title"
