@@ -9,23 +9,29 @@ import {
 import RowTblHeadTransaction from "./RowTblHeadTransaction";
 import RowTblDataTransaction from "./RowTblDataTransaction";
 import RowSubTblTransaction from "./RowSubTblTransaction";
-import { PaymentSource, PaymentType } from "@/types/apiTypes";
+import {
+  PaymentSource,
+  PaymentTransactionPayload,
+  PaymentType,
+} from "@/types/apiTypes";
 
 const TableTransactions = ({
   dataTable,
   handleUpload,
   isLoading,
   paymentSelected,
+  transactionHistoryData,
 }: {
   dataTable: PaymentType[];
   handleUpload: (payload: PaymentSource & { paymentType: string }) => void;
   isLoading: boolean;
   paymentSelected: string;
+  transactionHistoryData: PaymentTransactionPayload | null;
 }) => {
   return (
     <Table aria-label="collapsible table">
       <TableHead>
-        <RowTblHeadTransaction />
+        <RowTblHeadTransaction isLoading={isLoading} />
       </TableHead>
       <TableBody>
         {dataTable.map((item) => {
@@ -40,6 +46,7 @@ const TableTransactions = ({
                 key={item.paymentType}
                 isLoading={isLoading}
                 paymentSelected={paymentSelected}
+                transactionHistoryData={transactionHistoryData}
               />
             );
           }
@@ -63,6 +70,7 @@ const TableTransactions = ({
                     key={payment.paymentMethodId}
                     isLoading={isLoading}
                     paymentSelected={paymentSelected}
+                    transactionHistoryData={transactionHistoryData}
                   />
                 ))}
               </>

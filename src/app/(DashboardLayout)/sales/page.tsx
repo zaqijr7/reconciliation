@@ -200,8 +200,11 @@ const Sales = () => {
           <TableTransactions
             dataTable={listPaymentMethod}
             handleUpload={handleUploadFile}
-            paymentSelected={uploadFile.variables?.payload.paymentMethodId}
-            isLoading={uploadFile.isPending || getTransactionHistory.variables}
+            paymentSelected={
+              uploadFile.variables?.payload?.paymentMethodId as string
+            }
+            isLoading={uploadFile.isPending || getTransactionHistory.isPending}
+            transactionHistoryData={transactionHistory}
           />
         </>
       </DashboardCard>
