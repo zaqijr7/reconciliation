@@ -16,6 +16,16 @@ const RowTblHeadTransaction = ({ isLoading }: { isLoading: boolean }) => {
         </Typography>
       </TableCell>
       <TableCell align="right">
+        <Stack direction="row" alignItems="center" justifyContent="start">
+          <Typography variant="h6" fontWeight={600}>
+            File Name
+          </Typography>
+          {isLoading ? (
+            <CircularProgress sx={{ marginLeft: 1 }} size={15} />
+          ) : null}
+        </Stack>
+      </TableCell>
+      <TableCell align="right">
         <Stack direction="row" alignItems="center" justifyContent="end">
           <Typography variant="h6" fontWeight={600}>
             Amount

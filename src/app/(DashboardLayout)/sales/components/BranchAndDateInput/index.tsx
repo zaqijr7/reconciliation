@@ -34,6 +34,7 @@ const BranchAndDateInput = ({
       <DatePicker
         label="Pilih Tanggal"
         onChange={(e) => handleSetDate(e)}
+        format="DD/MM/YYYY"
         value={dateSelected}
         sx={{
           borderColor: "divider",

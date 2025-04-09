@@ -7,6 +7,7 @@ import "./global.css";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { RootProvider } from "./RootContext";
 
 const queryClient = new QueryClient();
 
@@ -23,7 +24,7 @@ export default function RootLayout({
           <CssBaseline />
           <LocalizationProvider dateAdapter={AdapterMoment}>
             <QueryClientProvider client={queryClient}>
-              {children}
+              <RootProvider>{children}</RootProvider>
             </QueryClientProvider>
           </LocalizationProvider>
         </ThemeProvider>

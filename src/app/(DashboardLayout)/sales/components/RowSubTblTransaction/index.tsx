@@ -40,6 +40,9 @@ const RowSubTblTransaction = ({
       <TableCell sx={{ paddingLeft: 10 }}>
         <Typography variant="body1">{data.paymentName}</Typography>
       </TableCell>
+      <TableCell>
+        <Typography>{getDetailTransaction()?.fileName || "-"}</Typography>
+      </TableCell>
       <TableCell align="right">
         <Typography variant="subtitle2" fontWeight={600}>
           {getDetailTransaction()?.amount
@@ -47,6 +50,7 @@ const RowSubTblTransaction = ({
             : "-"}
         </Typography>
       </TableCell>
+
       <TableCell align="right">
         <Typography variant="subtitle2" fontWeight={600}>
           {getDetailTransaction()?.statusRecon ? (

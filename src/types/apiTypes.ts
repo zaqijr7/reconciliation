@@ -40,6 +40,7 @@ export interface Transaction {
   paymentId: string;
   statusRecon: boolean;
   transactionSource: string;
+  fileName: string;
 }
 
 // Define the payload structure
