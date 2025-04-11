@@ -1,4 +1,10 @@
-import { TableCell, TableRow, Typography, useTheme } from "@mui/material";
+import {
+  Popover,
+  TableCell,
+  TableRow,
+  Typography,
+  useTheme,
+} from "@mui/material";
 import React from "react";
 import CellAction from "../CellAction";
 import { PaymentSource, PaymentTransactionPayload } from "@/types/apiTypes";
@@ -27,6 +33,18 @@ const RowSubTblTransaction = ({
     return null;
   };
 
+  const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
+
+  const handlePopoverOpen = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handlePopoverClose = () => {
+    setAnchorEl(null);
+  };
+
+  const open = Boolean(anchorEl);
+
   return (
     <TableRow
       key={data.paymentMethodId}
@@ -41,12 +59,43 @@ const RowSubTblTransaction = ({
         <Typography variant="body1">{data.paymentName}</Typography>
       </TableCell>
       <TableCell>
-        <Typography>{getDetailTransaction()?.fileName || "-"}</Typography>
+        <Typography
+          noWrap
+          width={300}
+          aria-owns={open ? "mouse-over-popover" : undefined}
+          aria-haspopup="true"
+          onMouseEnter={handlePopoverOpen}
+          onMouseLeave={handlePopoverClose}
+        >
+          {getDetailTransaction()?.fileName || "-"}
+        </Typography>
+        {getDetailTransaction()?.fileName && (
+          <Popover
+            id="mouse-over-popover"
+            sx={{ pointerEvents: "none" }}
+            open={open}
+            anchorEl={anchorEl}
+            anchorOrigin={{
+              vertical: "bottom",
+              horizontal: "left",
+            }}
+            transformOrigin={{
+              vertical: "top",
+              horizontal: "left",
+            }}
+            onClose={handlePopoverClose}
+            disableRestoreFocus
+          >
+            <Typography sx={{ p: 1 }}>
+              {getDetailTransaction()?.fileName || "-"}
+            </Typography>
+          </Popover>
+        )}
       </TableCell>
       <TableCell align="right">
         <Typography variant="subtitle2" fontWeight={600}>
           {getDetailTransaction()?.amount
-            ? `Rp. ${getDetailTransaction()?.amount}`
+            ? `Rp. ${getDetailTransaction()?.amount.toLocaleString("id-ID")}`
             : "-"}
         </Typography>
       </TableCell>
