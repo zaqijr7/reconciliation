@@ -96,13 +96,18 @@ const Sales = () => {
     getListBranch.mutate();
     getListPaymentMethod.mutate();
     setDateSelected(moment(Date.now()));
-    getListReportReconPosVsEcom.mutate({
-      transDate: "2025-03-25",
-      branchId: "M002",
-      offset: 0,
-      limit: 100,
-    });
   }, []);
+
+  useEffect(() => {
+    if (dateSelected && branchSelected) {
+      getListReportReconPosVsEcom.mutate({
+        transDate: moment(dateSelected).format("YYYY-MM-DD"),
+        branchId: branchSelected,
+        offset: 0,
+        limit: 100,
+      });
+    }
+  }, [branchSelected, dateSelected]);
   return (
     <PageContainer
       title="Report POS vs E-commerce"
