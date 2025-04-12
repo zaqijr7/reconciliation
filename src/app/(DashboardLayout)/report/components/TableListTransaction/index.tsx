@@ -10,40 +10,59 @@ import {
 import RowTblHeadTransaction from "../RowTblHeadTransaction";
 import RowTblDataTransaction from "../RowTblDataTransaction";
 import TablePaginationActions from "../TablePaginationAction";
+import { useEffect, useState } from "react";
 
 const TableTransactions = ({}: {}) => {
+  const [rightWidth, setRightWidth] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(50);
+
+  useEffect(() => {
+    const lastCol = document.getElementsByClassName(
+      "sticky-header",
+    ) as HTMLCollectionOf<HTMLElement>;
+    if (lastCol) {
+      setRightWidth(lastCol[lastCol.length - 1].offsetWidth);
+    }
+  }, []);
+
   return (
-    <TableContainer sx={{ width: "100%", maxHeight: 500 }}>
-      <Table aria-label="simple table" stickyHeader>
-        <TableHead>
-          <RowTblHeadTransaction />
-        </TableHead>
-        <TableBody>
-          {[...Array(20)].map((item) => {
-            item;
-            return (
-              <RowTblDataTransaction
-              // data={{
-              //   ...item.paymentSources[0],
-              //   paymentType: item.paymentType,
-              // }}
-              // handleUpload={handleUpload}
-              // key={item.paymentType}
-              // isLoading={isLoading}
-              // paymentSelected={paymentSelected}
-              // transactionHistoryData={transactionHistoryData}
-              />
-            );
-          })}
-        </TableBody>
+    <>
+      <TableContainer sx={{ width: "100%", maxHeight: 500 }}>
+        <Table aria-label="simple table" stickyHeader>
+          <TableHead>
+            <RowTblHeadTransaction rightWidth={rightWidth} />
+          </TableHead>
+          <TableBody>
+            {[...Array(20)].map((item, index) => {
+              item;
+              return (
+                <RowTblDataTransaction
+                  rightWidth={rightWidth}
+                  index={index}
+                  // data={{
+                  //   ...item.paymentSources[0],
+                  //   paymentType: item.paymentType,
+                  // }}
+                  // handleUpload={handleUpload}
+                  // key={item.paymentType}
+                  // isLoading={isLoading}
+                  // paymentSelected={paymentSelected}
+                  // transactionHistoryData={transactionHistoryData}
+                />
+              );
+            })}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      <Table>
         <TableFooter>
           <TableRow>
             <TablePagination
-              rowsPerPageOptions={[5, 10, 25, { label: "All", value: -1 }]}
+              rowsPerPageOptions={[50, 100]}
               colSpan={9}
-              count={50}
-              rowsPerPage={100}
-              page={1}
+              count={rowsPerPage}
+              rowsPerPage={rowsPerPage}
+              page={0}
               slotProps={{
                 select: {
                   inputProps: {
@@ -52,15 +71,16 @@ const TableTransactions = ({}: {}) => {
                   native: true,
                 },
               }}
-              sx={{ backgroundColor: "#F5F5F5" }}
               onPageChange={() => {}}
-              onRowsPerPageChange={() => {}}
+              onRowsPerPageChange={(e) => {
+                setRowsPerPage(parseInt(e.target.value));
+              }}
               ActionsComponent={TablePaginationActions}
             />
           </TableRow>
         </TableFooter>
       </Table>
-    </TableContainer>
+    </>
   );
 };
 

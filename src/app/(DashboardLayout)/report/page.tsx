@@ -62,6 +62,28 @@ const Sales = () => {
     },
   });
 
+  const getListReportReconPosVsEcom = useMutation({
+    mutationFn: async (data: {
+      transDate: string;
+      branchId: string;
+      offset: number;
+      limit: number;
+    }): Promise<AxiosResponse<any, any>> => {
+      const api = await fetchApi();
+      return api.post("/recon/report/recon-pos-ecom", data);
+    },
+    onSuccess: (response) => {
+      if (response.data.result === 200) {
+        console.log(response, "<<< ini responsenya");
+        return;
+      }
+      throw new Error();
+    },
+    onError: () => {
+      setListPaymentMethod([]);
+    },
+  });
+
   const handleDateSelected = (value: Moment | null) => {
     setDateSelected(value);
   };
@@ -74,6 +96,12 @@ const Sales = () => {
     getListBranch.mutate();
     getListPaymentMethod.mutate();
     setDateSelected(moment(Date.now()));
+    getListReportReconPosVsEcom.mutate({
+      transDate: "2025-03-25",
+      branchId: "M002",
+      offset: 0,
+      limit: 100,
+    });
   }, []);
   return (
     <PageContainer
@@ -88,6 +116,7 @@ const Sales = () => {
             handleSelectBranch={handleSelectedBranch}
             dateSelected={dateSelected}
             handleSetDate={handleDateSelected}
+            withTotalSales
           />
           <TableListTransaction />
         </>

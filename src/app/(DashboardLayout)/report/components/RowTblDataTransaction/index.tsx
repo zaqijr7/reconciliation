@@ -1,16 +1,43 @@
-import { TableCell, TableRow, Typography } from "@mui/material";
+import {
+  styled,
+  TableCell,
+  TableRow,
+  Typography,
+  useTheme,
+} from "@mui/material";
 import React from "react";
 
-const RowTblHeadTransaction = ({ isLoading }: { isLoading: boolean }) => {
+const StyledTableRow = styled(TableRow)(({ theme }) => ({
+  "&:nth-of-type(odd)": {
+    backgroundColor: theme.palette.action.hover,
+  },
+  // hide last border
+  "&:last-child td, &:last-child th": {
+    border: 0,
+  },
+}));
+
+const RowTblHeadTransaction = ({
+  isLoading,
+  rightWidth,
+  index,
+}: {
+  isLoading: boolean;
+  rightWidth: number;
+  index: number;
+}) => {
+  const theme = useTheme();
+
   const stickyHeader = {
     position: "sticky",
     right: 0,
     zIndex: "9990 !important",
-    backgroundColor: "white",
+    backgroundColor:
+      (index + 1) % 2 === 0 ? "white" : theme.palette.action.hover,
   };
 
   return (
-    <TableRow>
+    <StyledTableRow>
       <TableCell>
         <Typography variant="body1">Branch</Typography>
       </TableCell>
@@ -32,13 +59,21 @@ const RowTblHeadTransaction = ({ isLoading }: { isLoading: boolean }) => {
       <TableCell>
         <Typography variant="body1">Transaction From</Typography>
       </TableCell>
-      <TableCell>
+      <TableCell
+        sx={{
+          position: "sticky",
+          right: `${rightWidth}px`,
+          zIndex: "9990 !important",
+          backgroundColor:
+            (index + 1) % 2 === 0 ? "white" : theme.palette.action.hover,
+        }}
+      >
         <Typography variant="body1">Status in Agregator Report</Typography>
       </TableCell>
       <TableCell sx={stickyHeader}>
         <Typography variant="body1">Status in Bank</Typography>
       </TableCell>
-    </TableRow>
+    </StyledTableRow>
   );
 };
 
