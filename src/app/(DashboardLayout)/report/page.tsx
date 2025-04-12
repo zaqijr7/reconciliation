@@ -113,7 +113,7 @@ const Sales = () => {
       title="Report POS vs E-commerce"
       description="this is Sample page"
     >
-      <DashboardCard title="Report Recon POS vs E-commerce">
+      <DashboardCard title="Report Reconciliation POS">
         <>
           <BranchAndDateInput
             listBranch={listBranch}
