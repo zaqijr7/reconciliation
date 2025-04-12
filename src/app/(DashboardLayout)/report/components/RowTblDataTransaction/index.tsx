@@ -1,10 +1,12 @@
 import {
+  Stack,
   styled,
   TableCell,
   TableRow,
   Typography,
   useTheme,
 } from "@mui/material";
+import moment from "moment";
 import React from "react";
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
@@ -18,20 +20,31 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 const RowTblHeadTransaction = ({
-  isLoading,
+  // isLoading,
   rightWidth,
   index,
+  data,
 }: {
-  isLoading: boolean;
+  // isLoading: boolean;
   rightWidth: number;
   index: number;
+  data: {
+    branch: string;
+    date: string;
+    transTime: string;
+    transId: string;
+    paymMethod: string;
+    amountPOS: number;
+    statusAggregator: string;
+    statusBank: string;
+  };
 }) => {
   const theme = useTheme();
 
   const stickyHeader = {
     position: "sticky",
     right: 0,
-    zIndex: "9990 !important",
+    zIndex: "48 !important",
     backgroundColor:
       (index + 1) % 2 === 0 ? "white" : theme.palette.action.hover,
   };
@@ -39,39 +52,84 @@ const RowTblHeadTransaction = ({
   return (
     <StyledTableRow>
       <TableCell>
-        <Typography variant="body1">Branch</Typography>
+        <Typography noWrap variant="body1">
+          {data.branch}
+        </Typography>
       </TableCell>
       <TableCell>
-        <Typography variant="body1">Date</Typography>
+        <Typography noWrap variant="body1">
+          {moment(data.date).format("DD/MM/YYYY")}
+        </Typography>
       </TableCell>
       <TableCell>
-        <Typography variant="body1">Transaction Time</Typography>
+        <Typography noWrap variant="body1">
+          {data.transTime}
+        </Typography>
       </TableCell>
       <TableCell>
-        <Typography variant="body1">Transaction Id</Typography>
+        <Typography noWrap variant="body1">
+          {data.transId}
+        </Typography>
       </TableCell>
       <TableCell>
-        <Typography variant="body1">Payment Method</Typography>
+        <Typography noWrap variant="body1">
+          {data.paymMethod}
+        </Typography>
       </TableCell>
       <TableCell>
-        <Typography variant="body1">Amount POS</Typography>
-      </TableCell>
-      <TableCell>
-        <Typography variant="body1">Transaction From</Typography>
+        <Typography noWrap variant="body1">
+          Rp. {data.amountPOS.toLocaleString("id-ID")}
+        </Typography>
       </TableCell>
       <TableCell
         sx={{
           position: "sticky",
           right: `${rightWidth}px`,
-          zIndex: "9990 !important",
+          zIndex: "48 !important",
           backgroundColor:
             (index + 1) % 2 === 0 ? "white" : theme.palette.action.hover,
         }}
       >
-        <Typography variant="body1">Status in Agregator Report</Typography>
+        <Stack
+          sx={{
+            display: data.statusAggregator ? "inline-flex" : "none",
+            justifyContent: "center",
+            alignItems: "center",
+            padding: "10px 15px",
+            backgroundColor: theme.palette.success.main,
+            borderRadius: "5px",
+          }}
+        >
+          <Typography
+            variant="h6"
+            color={theme.palette.success.contrastText}
+            textAlign={"center"}
+          >
+            {data.statusAggregator}
+          </Typography>
+        </Stack>
+        {!data.statusAggregator ? "-" : null}
       </TableCell>
       <TableCell sx={stickyHeader}>
-        <Typography variant="body1">Status in Bank</Typography>
+        <Stack
+          sx={{
+            display: data.statusBank ? "inline-flex" : "none",
+            justifyContent: "center",
+            alignItems: "center",
+            padding: "10px 15px",
+            backgroundColor: theme.palette.success.main,
+            borderRadius: "5px",
+          }}
+        >
+          <Typography
+            variant="h6"
+            color={theme.palette.success.contrastText}
+            textAlign={"center"}
+          >
+            {data.statusBank}
+          </Typography>
+        </Stack>
+        {!data.statusBank ? "-" : null}
       </TableCell>
     </StyledTableRow>
   );

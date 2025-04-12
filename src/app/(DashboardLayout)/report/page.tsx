@@ -79,8 +79,8 @@ const Sales = () => {
       }
       throw new Error();
     },
-    onError: () => {
-      setListPaymentMethod([]);
+    onError: (err) => {
+      console.log("Error fetching report", err);
     },
   });
 

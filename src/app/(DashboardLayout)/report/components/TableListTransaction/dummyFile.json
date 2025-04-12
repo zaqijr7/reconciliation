@@ -1,0 +1,252 @@
+[
+  {
+    "branch": "Menantea Dago Pakar Bandung",
+    "date": "30/04/23",
+    "transTime": "19.50.30",
+    "transId": "123001",
+    "paymMethod": "ShopeeFood",
+    "amountPOS": 814104,
+    "statusAggregator": "OK with notes",
+    "statusBank": "OK"
+  },
+  {
+    "branch": "Menantea Dago Pakar Bandung",
+    "date": "30/04/23",
+    "transTime": "16.35.00",
+    "transId": "123002",
+    "paymMethod": "Shopeepay",
+    "amountPOS": 1963311,
+    "statusAggregator": "OK with notes",
+    "statusBank": "Not OK"
+  },
+  {
+    "branch": "Menantea Dago Pakar Bandung",
+    "date": "30/04/23",
+    "transTime": "17.45.52",
+    "transId": "123003",
+    "paymMethod": "GrabFood",
+    "amountPOS": 1868052,
+    "statusAggregator": "",
+    "statusBank": ""
+  },
+  {
+    "branch": "Menantea Dago Pakar Bandung",
+    "date": "30/04/23",
+    "transTime": "20.50.08",
+    "transId": "123004",
+    "paymMethod": "BCA",
+    "amountPOS": 1208438,
+    "statusAggregator": "",
+    "statusBank": ""
+  },
+  {
+    "branch": "Menantea Dago Pakar Bandung",
+    "date": "30/04/23",
+    "transTime": "20.53.58",
+    "transId": "123005",
+    "paymMethod": "Shopeepay",
+    "amountPOS": 8085,
+    "statusAggregator": "OK with notes",
+    "statusBank": ""
+  },
+  {
+    "branch": "Menantea Dago Pakar Bandung",
+    "date": "30/04/23",
+    "transTime": "17.17.23",
+    "transId": "123006",
+    "paymMethod": "Shopeepay",
+    "amountPOS": 1229615,
+    "statusAggregator": "OK",
+    "statusBank": ""
+  },
+  {
+    "branch": "Menantea Dago Pakar Bandung",
+    "date": "30/04/23",
+    "transTime": "18.53.26",
+    "transId": "123007",
+    "paymMethod": "GoFood",
+    "amountPOS": 5914,
+    "statusAggregator": "OK with notes",
+    "statusBank": "OK"
+  },
+  {
+    "branch": "Menantea Dago Pakar Bandung",
+    "date": "30/04/23",
+    "transTime": "18.46.35",
+    "transId": "123008",
+    "paymMethod": "ShopeeFood",
+    "amountPOS": 1645263,
+    "statusAggregator": "Not OK",
+    "statusBank": "Not OK"
+  },
+  {
+    "branch": "Menantea Dago Pakar Bandung",
+    "date": "30/04/23",
+    "transTime": "15.40.29",
+    "transId": "123009",
+    "paymMethod": "GrabFood",
+    "amountPOS": 534418,
+    "statusAggregator": "Not OK",
+    "statusBank": "OK"
+  },
+  {
+    "branch": "Menantea Dago Pakar Bandung",
+    "date": "30/04/23",
+    "transTime": "16.01.53",
+    "transId": "123010",
+    "paymMethod": "Shopeepay",
+    "amountPOS": 870541,
+    "statusAggregator": "OK with notes",
+    "statusBank": "OK"
+  },
+  {
+    "branch": "Menantea Dago Pakar Bandung",
+    "date": "30/04/23",
+    "transTime": "20.34.48",
+    "transId": "123011",
+    "paymMethod": "GoFood",
+    "amountPOS": 411903,
+    "statusAggregator": "OK",
+    "statusBank": ""
+  },
+  {
+    "branch": "Menantea Dago Pakar Bandung",
+    "date": "30/04/23",
+    "transTime": "20.27.26",
+    "transId": "123012",
+    "paymMethod": "ShopeeFood",
+    "amountPOS": 939754,
+    "statusAggregator": "OK with notes",
+    "statusBank": "OK"
+  },
+  {
+    "branch": "Menantea Dago Pakar Bandung",
+    "date": "30/04/23",
+    "transTime": "15.08.39",
+    "transId": "123013",
+    "paymMethod": "Shopeepay",
+    "amountPOS": 1547644,
+    "statusAggregator": "",
+    "statusBank": "Not OK"
+  },
+  {
+    "branch": "Menantea Dago Pakar Bandung",
+    "date": "30/04/23",
+    "transTime": "19.50.35",
+    "transId": "123014",
+    "paymMethod": "GoFood",
+    "amountPOS": 657906,
+    "statusAggregator": "OK with notes",
+    "statusBank": "Not OK"
+  },
+  {
+    "branch": "Menantea Dago Pakar Bandung",
+    "date": "30/04/23",
+    "transTime": "20.08.00",
+    "transId": "123015",
+    "paymMethod": "GrabFood",
+    "amountPOS": 1669401,
+    "statusAggregator": "Not OK",
+    "statusBank": "Not OK"
+  },
+  {
+    "branch": "Menantea Dago Pakar Bandung",
+    "date": "30/04/23",
+    "transTime": "19.22.29",
+    "transId": "123016",
+    "paymMethod": "GrabFood",
+    "amountPOS": 4630,
+    "statusAggregator": "",
+    "statusBank": ""
+  },
+  {
+    "branch": "Menantea Dago Pakar Bandung",
+    "date": "30/04/23",
+    "transTime": "19.20.26",
+    "transId": "123017",
+    "paymMethod": "GrabFood",
+    "amountPOS": 9054,
+    "statusAggregator": "",
+    "statusBank": "OK"
+  },
+  {
+    "branch": "Menantea Dago Pakar Bandung",
+    "date": "30/04/23",
+    "transTime": "15.01.05",
+    "transId": "123018",
+    "paymMethod": "ShopeeFood",
+    "amountPOS": 4795,
+    "statusAggregator": "OK with notes",
+    "statusBank": "OK"
+  },
+  {
+    "branch": "Menantea Dago Pakar Bandung",
+    "date": "30/04/23",
+    "transTime": "16.20.15",
+    "transId": "123019",
+    "paymMethod": "GoFood",
+    "amountPOS": 1415904,
+    "statusAggregator": "",
+    "statusBank": ""
+  },
+  {
+    "branch": "Menantea Dago Pakar Bandung",
+    "date": "30/04/23",
+    "transTime": "19.18.05",
+    "transId": "123020",
+    "paymMethod": "GoFood",
+    "amountPOS": 456560,
+    "statusAggregator": "OK with notes",
+    "statusBank": ""
+  },
+  {
+    "branch": "Menantea Dago Pakar Bandung",
+    "date": "30/04/23",
+    "transTime": "15.55.14",
+    "transId": "123021",
+    "paymMethod": "GrabFood",
+    "amountPOS": 586732,
+    "statusAggregator": "OK",
+    "statusBank": "OK"
+  },
+  {
+    "branch": "Menantea Dago Pakar Bandung",
+    "date": "30/04/23",
+    "transTime": "16.34.54",
+    "transId": "123022",
+    "paymMethod": "BCA",
+    "amountPOS": 3926,
+    "statusAggregator": "",
+    "statusBank": "OK"
+  },
+  {
+    "branch": "Menantea Dago Pakar Bandung",
+    "date": "30/04/23",
+    "transTime": "19.28.23",
+    "transId": "123023",
+    "paymMethod": "ShopeeFood",
+    "amountPOS": 1674586,
+    "statusAggregator": "Not OK",
+    "statusBank": "OK"
+  },
+  {
+    "branch": "Menantea Dago Pakar Bandung",
+    "date": "30/04/23",
+    "transTime": "16.09.36",
+    "transId": "123024",
+    "paymMethod": "BCA",
+    "amountPOS": 1850297,
+    "statusAggregator": "Not OK",
+    "statusBank": "OK"
+  },
+  {
+    "branch": "Menantea Dago Pakar Bandung",
+    "date": "30/04/23",
+    "transTime": "17.28.05",
+    "transId": "123025",
+    "paymMethod": "ShopeeFood",
+    "amountPOS": 1840,
+    "statusAggregator": "OK with notes",
+    "statusBank": ""
+  }
+]

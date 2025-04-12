@@ -97,7 +97,7 @@ const BranchAndDateInput = ({
       {withTotalSales && (
         <Stack>
           <Typography fontWeight={700}>
-            Total Sales POS: Rp. 405004050540
+            Total Sales POS: Rp. {(4050040).toLocaleString("id-ID")}
           </Typography>
         </Stack>
       )}

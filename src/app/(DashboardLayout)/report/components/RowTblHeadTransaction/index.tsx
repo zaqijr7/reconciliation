@@ -11,7 +11,7 @@ const RowTblHeadTransaction = ({
   const stickyHeader = {
     position: "sticky",
     right: 0,
-    zIndex: "9999 !important",
+    zIndex: "50 !important",
     backgroundColor: "white",
   };
   const theme = useTheme();
@@ -56,22 +56,17 @@ const RowTblHeadTransaction = ({
           Amount POS
         </Typography>
       </TableCell>
-      <TableCell sx={styleHeader}>
-        <Typography variant="h6" noWrap fontWeight={600}>
-          Transaction From
-        </Typography>
-      </TableCell>
       <TableCell
         sx={{
           position: "sticky",
           right: `${rightWidth}px`,
-          zIndex: "9999 !important",
+          zIndex: "50 !important",
           backgroundColor: "white",
           ...styleHeader,
         }}
         className="sticky-header"
       >
-        <Typography variant="h6" noWrap fontWeight={600}>
+        <Typography variant="h6" noWrap textAlign={"center"} fontWeight={600}>
           Status in Agregator Report
         </Typography>
       </TableCell>
@@ -79,7 +74,7 @@ const RowTblHeadTransaction = ({
         sx={{ ...stickyHeader, ...styleHeader }}
         className="sticky-header"
       >
-        <Typography variant="h6" noWrap fontWeight={600}>
+        <Typography variant="h6" noWrap textAlign={"center"} fontWeight={600}>
           Status in Bank
         </Typography>
       </TableCell>

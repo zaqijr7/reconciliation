@@ -11,6 +11,7 @@ import RowTblHeadTransaction from "../RowTblHeadTransaction";
 import RowTblDataTransaction from "../RowTblDataTransaction";
 import TablePaginationActions from "../TablePaginationAction";
 import { useEffect, useState } from "react";
+import dummy from "./dummyFile.json";
 
 const TableTransactions = ({}: {}) => {
   const [rightWidth, setRightWidth] = useState(0);
@@ -33,12 +34,12 @@ const TableTransactions = ({}: {}) => {
             <RowTblHeadTransaction rightWidth={rightWidth} />
           </TableHead>
           <TableBody>
-            {[...Array(20)].map((item, index) => {
-              item;
+            {dummy.map((item, index) => {
               return (
                 <RowTblDataTransaction
                   rightWidth={rightWidth}
                   index={index}
+                  data={item}
                   // data={{
                   //   ...item.paymentSources[0],
                   //   paymentType: item.paymentType,
@@ -59,7 +60,7 @@ const TableTransactions = ({}: {}) => {
           <TableRow>
             <TablePagination
               rowsPerPageOptions={[50, 100]}
-              colSpan={9}
+              colSpan={8}
               count={rowsPerPage}
               rowsPerPage={rowsPerPage}
               page={0}
