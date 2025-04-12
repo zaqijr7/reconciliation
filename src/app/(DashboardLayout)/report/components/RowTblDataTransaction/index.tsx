@@ -6,7 +6,6 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-import moment from "moment";
 import React from "react";
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
@@ -58,7 +57,7 @@ const RowTblHeadTransaction = ({
       </TableCell>
       <TableCell>
         <Typography noWrap variant="body1">
-          {moment(data.date).format("DD/MM/YYYY")}
+          {data.date}
         </Typography>
       </TableCell>
       <TableCell>
