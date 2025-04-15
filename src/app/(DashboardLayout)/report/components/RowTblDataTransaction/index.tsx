@@ -1,5 +1,4 @@
 import {
-  Stack,
   styled,
   TableCell,
   TableRow,
@@ -48,6 +47,16 @@ const RowTblHeadTransaction = ({
       (index + 1) % 2 === 0 ? "white" : theme.palette.action.hover,
   };
 
+  const colorBadge = (status: string) => {
+    if (status === "OK WITH NOTES") {
+      return theme.palette.warning.main;
+    } else if (status === "OK") {
+      return theme.palette.success.main;
+    } else if (status === "NOT OK") {
+      return theme.palette.error.main;
+    }
+  };
+
   return (
     <StyledTableRow>
       <TableCell>
@@ -85,50 +94,49 @@ const RowTblHeadTransaction = ({
           position: "sticky",
           right: `${rightWidth}px`,
           zIndex: "48 !important",
+          textAlign: "center",
           backgroundColor:
             (index + 1) % 2 === 0 ? "white" : theme.palette.action.hover,
         }}
       >
-        <Stack
-          sx={{
-            display: data.statusAggregator ? "inline-flex" : "none",
-            justifyContent: "center",
-            alignItems: "center",
-            padding: "10px 15px",
-            backgroundColor: theme.palette.success.main,
-            borderRadius: "5px",
-          }}
-        >
+        {!data.statusAggregator ? (
+          "-"
+        ) : (
           <Typography
-            variant="h6"
+            sx={{
+              padding: "8px 15px",
+              backgroundColor: colorBadge(
+                data.statusAggregator.toLocaleUpperCase(),
+              ),
+              borderRadius: "5px",
+            }}
+            variant="caption"
+            fontWeight={700}
             color={theme.palette.success.contrastText}
             textAlign={"center"}
           >
-            {data.statusAggregator}
+            {data.statusAggregator.toLocaleUpperCase()}
           </Typography>
-        </Stack>
-        {!data.statusAggregator ? "-" : null}
+        )}
       </TableCell>
-      <TableCell sx={stickyHeader}>
-        <Stack
-          sx={{
-            display: data.statusBank ? "inline-flex" : "none",
-            justifyContent: "center",
-            alignItems: "center",
-            padding: "10px 15px",
-            backgroundColor: theme.palette.success.main,
-            borderRadius: "5px",
-          }}
-        >
+      <TableCell sx={{ ...stickyHeader, textAlign: "center" }}>
+        {!data.statusBank ? (
+          "-"
+        ) : (
           <Typography
-            variant="h6"
+            sx={{
+              padding: "8px 15px",
+              backgroundColor: colorBadge(data.statusBank.toUpperCase()),
+              borderRadius: "5px",
+            }}
+            variant="caption"
+            fontWeight={700}
             color={theme.palette.success.contrastText}
             textAlign={"center"}
           >
-            {data.statusBank}
+            {data.statusBank.toUpperCase()}
           </Typography>
-        </Stack>
-        {!data.statusBank ? "-" : null}
+        )}
       </TableCell>
     </StyledTableRow>
   );

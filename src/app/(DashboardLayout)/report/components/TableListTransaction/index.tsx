@@ -40,15 +40,6 @@ const TableTransactions = ({}: {}) => {
                   rightWidth={rightWidth}
                   index={index}
                   data={item}
-                  // data={{
-                  //   ...item.paymentSources[0],
-                  //   paymentType: item.paymentType,
-                  // }}
-                  // handleUpload={handleUpload}
-                  // key={item.paymentType}
-                  // isLoading={isLoading}
-                  // paymentSelected={paymentSelected}
-                  // transactionHistoryData={transactionHistoryData}
                 />
               );
             })}

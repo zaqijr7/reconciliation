@@ -5,7 +5,6 @@ import {
   Select,
   SelectChangeEvent,
   Stack,
-  Typography,
 } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
 import moment from "moment";
@@ -17,7 +16,6 @@ const BranchAndDateInput = ({
   handleSelectBranch,
   handleSetDate,
   dateSelected,
-  withTotalSales = false,
 }: {
   listBranch: {
     branchId: string;
@@ -30,7 +28,6 @@ const BranchAndDateInput = ({
   ) => void;
   handleSetDate: (date: moment.Moment | null) => void;
   dateSelected: moment.Moment | null;
-  withTotalSales?: boolean;
 }) => {
   return (
     <Stack
@@ -44,7 +41,7 @@ const BranchAndDateInput = ({
     >
       <Stack sx={{ display: "block" }}>
         <DatePicker
-          label="Pilih Tanggal"
+          label="Date"
           onChange={(e) => handleSetDate(e)}
           format="DD/MM/YYYY"
           value={dateSelected}
@@ -94,13 +91,6 @@ const BranchAndDateInput = ({
           </Select>
         </FormControl>
       </Stack>
-      {withTotalSales && (
-        <Stack>
-          <Typography fontWeight={700}>
-            Total Sales POS: Rp. {(4050040).toLocaleString("id-ID")}
-          </Typography>
-        </Stack>
-      )}
     </Stack>
   );
 };

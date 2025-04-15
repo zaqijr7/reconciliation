@@ -1,3 +1,4 @@
+"use client";
 import { Moment } from "moment";
 import React, {
   createContext,
@@ -5,6 +6,7 @@ import React, {
   useReducer,
   Dispatch,
   ReactNode,
+  useEffect,
 } from "react";
 
 // Tipe untuk satu task
@@ -13,16 +15,28 @@ type TypeState = {
     dateTransaction: Moment | string;
     branch: string;
   };
+  getInformationReport: {
+    date: Moment | string;
+    branch: string;
+  };
 };
 
 // Tipe untuk action reducer
-type Action = {
-  type: "changed";
-  payload: {
-    key: "dateTransaction" | "branch";
-    value: Moment | string;
-  };
-};
+type Action =
+  | {
+      type: "changed";
+      payload: {
+        key: "dateTransaction" | "branch";
+        value: Moment | string;
+      };
+    }
+  | {
+      type: "changedStateReport";
+      payload: {
+        key: "date" | "branch";
+        value: Moment | string;
+      };
+    };
 
 // Initial tasks
 const initialState: TypeState = {
@@ -30,6 +44,21 @@ const initialState: TypeState = {
     dateTransaction: "",
     branch: "",
   },
+  getInformationReport: {
+    date: "",
+    branch: "",
+  },
+};
+
+// Fungsi untuk memuat state dari localStorage
+const loadState = (): TypeState => {
+  if (typeof window !== "undefined") {
+    const savedState = localStorage.getItem("reconState");
+    if (savedState) {
+      return JSON.parse(savedState);
+    }
+  }
+  return initialState;
 };
 
 // Reducer function
@@ -40,6 +69,15 @@ function rootReducer(state: TypeState, action: Action): TypeState {
         ...state,
         getInformationRecon: {
           ...state.getInformationRecon,
+          [action.payload.key]: action.payload.value,
+        },
+      };
+    }
+    case "changedStateReport": {
+      return {
+        ...state,
+        getInformationReport: {
+          ...state.getInformationReport,
           [action.payload.key]: action.payload.value,
         },
       };
@@ -58,7 +96,13 @@ const RootDispatchContext = createContext<Dispatch<Action> | undefined>(
 
 // Provider component
 export function RootProvider({ children }: { children: ReactNode }) {
-  const [tasks, dispatch] = useReducer(rootReducer, initialState);
+  // Menggunakan state yang dimuat dari localStorage atau initialState
+  const [tasks, dispatch] = useReducer(rootReducer, loadState());
+
+  // Menyimpan state ke localStorage setiap kali state berubah
+  useEffect(() => {
+    localStorage.setItem("reconState", JSON.stringify(tasks));
+  }, [tasks]);
 
   return (
     <RootContext.Provider value={tasks}>

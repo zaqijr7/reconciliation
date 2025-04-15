@@ -19,7 +19,7 @@ import { Ref, useEffect, useRef, useState } from "react";
 import { SelectChangeEvent } from "@mui/material";
 import moment, { Moment } from "moment";
 import SnackbarBox, { SnackbarBoxRef } from "../components/common/SnackBar";
-import { useRootStateDispatch } from "@/app/RootContext";
+import { useRootState, useRootStateDispatch } from "@/app/RootContext";
 
 const Sales = () => {
   const [listBranch, setListBranch] = useState<
@@ -34,6 +34,7 @@ const Sales = () => {
     useState<PaymentTransactionPayload | null>(null);
   const [branchSelected, setBranchSelected] = useState("");
   const [dateSelected, setDateSelected] = useState<moment.Moment | null>(null);
+  const { getInformationRecon } = useRootState();
 
   const handleUploadFile = (
     payload: PaymentSource & { paymentType: string },
@@ -81,7 +82,7 @@ const Sales = () => {
     onSuccess: () => {
       snackBarRef.current?.showSnackbar({
         open: true,
-        message: "Berhasil Upload File !",
+        message: "Upload success!",
       });
     },
     onError: (error) => {
@@ -103,14 +104,16 @@ const Sales = () => {
     onSuccess: (response) => {
       if (response.data.result === 200) {
         setListBranch(response.data.payload);
-        setBranchSelected(response.data.payload[0].branchId);
-        dispatch({
-          type: "changed",
-          payload: {
-            key: "branch",
-            value: response.data.payload[0].branchId,
-          },
-        });
+        if (!getInformationRecon.branch) {
+          dispatch({
+            type: "changed",
+            payload: {
+              key: "branch",
+              value: response.data.payload[0].branchId,
+            },
+          });
+        }
+
         return;
       }
       throw new Error();
@@ -161,7 +164,6 @@ const Sales = () => {
   });
 
   const handleDateSelected = (value: Moment | null) => {
-    setDateSelected(value);
     dispatch({
       type: "changed",
       payload: {
@@ -172,7 +174,6 @@ const Sales = () => {
   };
 
   const handleSelectedBranch = (value: SelectChangeEvent<string>) => {
-    setBranchSelected(value.target.value);
     dispatch({
       type: "changed",
       payload: {
@@ -185,15 +186,24 @@ const Sales = () => {
   useEffect(() => {
     getListBranch.mutate();
     getListPaymentMethod.mutate();
-    setDateSelected(moment(Date.now()));
-    dispatch({
-      type: "changed",
-      payload: {
-        key: "dateTransaction",
-        value: moment(Date.now()),
-      },
-    });
+    if (!getInformationRecon.dateTransaction) {
+      dispatch({
+        type: "changed",
+        payload: {
+          key: "dateTransaction",
+          value: moment(Date.now()),
+        },
+      });
+    }
   }, []);
+
+  useEffect(() => {
+    setDateSelected(moment(getInformationRecon.dateTransaction));
+  }, [getInformationRecon.dateTransaction]);
+
+  useEffect(() => {
+    setBranchSelected(getInformationRecon.branch as string);
+  }, [getInformationRecon.branch]);
 
   useEffect(() => {
     if (dateSelected && branchSelected) {
