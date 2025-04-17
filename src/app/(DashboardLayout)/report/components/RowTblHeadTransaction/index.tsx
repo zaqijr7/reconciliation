@@ -1,13 +1,7 @@
 import { TableCell, TableRow, Typography, useTheme } from "@mui/material";
 import React from "react";
 
-const RowTblHeadTransaction = ({
-  isLoading,
-  rightWidth,
-}: {
-  isLoading: boolean;
-  rightWidth: number;
-}) => {
+const RowTblHeadTransaction = ({ rightWidth }: { rightWidth: number }) => {
   const stickyHeader = {
     position: "sticky",
     right: 0,

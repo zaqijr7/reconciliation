@@ -58,3 +58,28 @@ export interface PaymentTransactionResponse {
   payload: PaymentTransactionPayload;
   result: number;
 }
+
+export interface PostReportDto {
+  amountPos: number;
+  branch: string;
+  inAggregator: string;
+  paymentMethod: string;
+  statusInBank: string;
+  transDate: string; // Format tanggal: YYYY-MM-DD
+  transId: string;
+  transTime: string; // Format waktu: HH:mm:ss
+}
+
+export interface PostReportDtoPayload {
+  diff: number;
+  postReportDtos: PostReportDto[];
+  totalAgg: number;
+  totalData: number;
+  totalPos: number;
+}
+
+export interface ReportResponseType {
+  message: string;
+  payload: PostReportDtoPayload;
+  result: number;
+}

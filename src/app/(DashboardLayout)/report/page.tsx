@@ -13,7 +13,11 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { AxiosResponse } from "axios";
-import { GetListBranchType } from "../../../types/apiTypes";
+import {
+  GetListBranchType,
+  PostReportDtoPayload,
+  ReportResponseType,
+} from "../../../types/apiTypes";
 import { useMutation } from "@tanstack/react-query";
 import fetchApi from "../../../utils/fetchApi";
 import TableListTransaction from "./components/TableListTransaction";
@@ -24,9 +28,11 @@ const Sales = () => {
   const [listBranch, setListBranch] = useState<
     { branchId: string; branchName: string }[] | []
   >([]);
-
   const { getInformationReport } = useRootState();
   const dispatch = useRootStateDispatch();
+  const [resultReport, setResultReport] = useState<PostReportDtoPayload | null>(
+    null,
+  );
 
   const getListBranch = useMutation({
     mutationFn: async (): Promise<AxiosResponse<GetListBranchType, any>> => {
@@ -60,19 +66,20 @@ const Sales = () => {
       branchId: string;
       offset: number;
       limit: number;
-    }): Promise<AxiosResponse<any, any>> => {
+    }): Promise<AxiosResponse<ReportResponseType, any>> => {
       const api = await fetchApi();
       return api.post("/recon/report/recon-pos-ecom", data);
     },
     onSuccess: (response) => {
       if (response.data.result === 200) {
-        console.log(response, "<<< ini responsenya");
+        setResultReport(response.data.payload);
         return;
       }
       throw new Error();
     },
     onError: (err) => {
       console.log("Error fetching report", err);
+      setResultReport(null);
     },
   });
 
@@ -84,6 +91,7 @@ const Sales = () => {
         value: value as Moment,
       },
     });
+    setResultReport(null);
   };
 
   const handleSelectedBranch = (value: SelectChangeEvent<string>) => {
@@ -94,6 +102,7 @@ const Sales = () => {
         value: value.target.value,
       },
     });
+    setResultReport(null);
   };
 
   useEffect(() => {
@@ -109,16 +118,14 @@ const Sales = () => {
     }
   }, []);
 
-  useEffect(() => {
-    if (dateSelected && branchSelected) {
-      getListReportReconPosVsEcom.mutate({
-        transDate: moment(dateSelected).format("YYYY-MM-DD"),
-        branchId: branchSelected,
-        offset: 0,
-        limit: 100,
-      });
-    }
-  }, [branchSelected, dateSelected]);
+  const getDataReport = () => {
+    getListReportReconPosVsEcom.mutate({
+      transDate: moment(dateSelected).format("YYYY-MM-DD"),
+      branchId: branchSelected,
+      offset: 0,
+      limit: 100,
+    });
+  };
 
   useEffect(() => {
     setDateSelected(moment(getInformationReport.date));
@@ -162,21 +169,28 @@ const Sales = () => {
                 sx={{
                   color: "white",
                 }}
-                onClick={() => {}}
-                disabled={false}
+                onClick={getDataReport}
+                disabled={
+                  getListReportReconPosVsEcom.isPending ||
+                  !branchSelected ||
+                  !dateSelected
+                }
               >
                 Generate Report{" "}
-                {true && (
+                {getListReportReconPosVsEcom.isPending && (
                   <CircularProgress
-                    sx={{ marginLeft: 1, color: "white" }}
+                    sx={{ marginLeft: 1, color: "GrayText" }}
                     size={15}
                   />
                 )}
               </Button>
             </Stack>
           </Stack>
-
-          <TableListTransaction />
+          <TableListTransaction
+            isLoading={getListReportReconPosVsEcom.isPending}
+            postReportDtos={resultReport}
+            listBranch={listBranch}
+          />
         </>
       </DashboardCard>
     </PageContainer>

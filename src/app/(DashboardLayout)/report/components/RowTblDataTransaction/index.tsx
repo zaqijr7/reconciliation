@@ -6,6 +6,7 @@ import {
   useTheme,
 } from "@mui/material";
 import React from "react";
+import { PostReportDto } from "../../../../../types/apiTypes";
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
   "&:nth-of-type(odd)": {
@@ -22,20 +23,18 @@ const RowTblHeadTransaction = ({
   rightWidth,
   index,
   data,
+  listBranch,
 }: {
   // isLoading: boolean;
   rightWidth: number;
   index: number;
-  data: {
-    branch: string;
-    date: string;
-    transTime: string;
-    transId: string;
-    paymMethod: string;
-    amountPOS: number;
-    statusAggregator: string;
-    statusBank: string;
-  };
+  data: PostReportDto;
+  listBranch:
+    | []
+    | {
+        branchId: string;
+        branchName: string;
+      }[];
 }) => {
   const theme = useTheme();
 
@@ -61,12 +60,13 @@ const RowTblHeadTransaction = ({
     <StyledTableRow>
       <TableCell>
         <Typography noWrap variant="body1">
-          {data.branch}
+          {listBranch.find((item) => item.branchId === data.branch)?.branchName}{" "}
+          {"-"} {data.branch}
         </Typography>
       </TableCell>
       <TableCell>
         <Typography noWrap variant="body1">
-          {data.date}
+          {data.transDate}
         </Typography>
       </TableCell>
       <TableCell>
@@ -81,12 +81,12 @@ const RowTblHeadTransaction = ({
       </TableCell>
       <TableCell>
         <Typography noWrap variant="body1">
-          {data.paymMethod}
+          {data.paymentMethod}
         </Typography>
       </TableCell>
       <TableCell>
         <Typography noWrap variant="body1">
-          Rp. {data.amountPOS.toLocaleString("id-ID")}
+          Rp. {data.amountPos.toLocaleString("id-ID")}
         </Typography>
       </TableCell>
       <TableCell
@@ -99,14 +99,14 @@ const RowTblHeadTransaction = ({
             (index + 1) % 2 === 0 ? "white" : theme.palette.action.hover,
         }}
       >
-        {!data.statusAggregator ? (
+        {!data.inAggregator ? (
           "-"
         ) : (
           <Typography
             sx={{
               padding: "8px 15px",
               backgroundColor: colorBadge(
-                data.statusAggregator.toLocaleUpperCase(),
+                data.inAggregator.toLocaleUpperCase(),
               ),
               borderRadius: "5px",
             }}
@@ -115,18 +115,18 @@ const RowTblHeadTransaction = ({
             color={theme.palette.success.contrastText}
             textAlign={"center"}
           >
-            {data.statusAggregator.toLocaleUpperCase()}
+            {data.inAggregator.toLocaleUpperCase()}
           </Typography>
         )}
       </TableCell>
       <TableCell sx={{ ...stickyHeader, textAlign: "center" }}>
-        {!data.statusBank ? (
+        {!data.statusInBank ? (
           "-"
         ) : (
           <Typography
             sx={{
               padding: "8px 15px",
-              backgroundColor: colorBadge(data.statusBank.toUpperCase()),
+              backgroundColor: colorBadge(data.statusInBank.toUpperCase()),
               borderRadius: "5px",
             }}
             variant="caption"
@@ -134,7 +134,7 @@ const RowTblHeadTransaction = ({
             color={theme.palette.success.contrastText}
             textAlign={"center"}
           >
-            {data.statusBank.toUpperCase()}
+            {data.statusInBank.toUpperCase()}
           </Typography>
         )}
       </TableCell>

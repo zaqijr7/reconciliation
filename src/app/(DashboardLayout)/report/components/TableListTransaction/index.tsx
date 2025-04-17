@@ -1,21 +1,35 @@
 import {
   Table,
   TableBody,
+  TableCell,
   TableContainer,
   TableFooter,
   TableHead,
   TablePagination,
   TableRow,
+  Typography,
 } from "@mui/material";
 import RowTblHeadTransaction from "../RowTblHeadTransaction";
 import RowTblDataTransaction from "../RowTblDataTransaction";
 import TablePaginationActions from "../TablePaginationAction";
-import { useEffect, useState } from "react";
-import dummy from "./dummyFile.json";
+import { useEffect, useMemo, useState } from "react";
+import { PostReportDtoPayload } from "../../../../../types/apiTypes";
 
-const TableTransactions = ({}: {}) => {
+const TableTransactions = ({
+  isLoading,
+  postReportDtos,
+  listBranch,
+}: {
+  isLoading: boolean;
+  postReportDtos: PostReportDtoPayload | null;
+  listBranch:
+    | []
+    | {
+        branchId: string;
+        branchName: string;
+      }[];
+}) => {
   const [rightWidth, setRightWidth] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(50);
 
   useEffect(() => {
     const lastCol = document.getElementsByClassName(
@@ -26,6 +40,29 @@ const TableTransactions = ({}: {}) => {
     }
   }, []);
 
+  const checkIsExistData = useMemo(() => {
+    if (postReportDtos && postReportDtos.postReportDtos.length > 0) {
+      return postReportDtos?.postReportDtos?.map((item, index) => (
+        <RowTblDataTransaction
+          key={index}
+          data={item}
+          index={index}
+          rightWidth={rightWidth}
+          listBranch={listBranch}
+        />
+      ));
+    }
+    return (
+      <TableRow>
+        <TableCell colSpan={8}>
+          <Typography noWrap variant="body1" textAlign={"center"}>
+            No Data
+          </Typography>
+        </TableCell>
+      </TableRow>
+    );
+  }, [postReportDtos, isLoading]);
+
   return (
     <>
       <TableContainer sx={{ width: "100%", maxHeight: 500 }}>
@@ -34,15 +71,17 @@ const TableTransactions = ({}: {}) => {
             <RowTblHeadTransaction rightWidth={rightWidth} />
           </TableHead>
           <TableBody>
-            {dummy.map((item, index) => {
-              return (
-                <RowTblDataTransaction
-                  rightWidth={rightWidth}
-                  index={index}
-                  data={item}
-                />
-              );
-            })}
+            {isLoading ? (
+              <TableRow>
+                <TableCell colSpan={8}>
+                  <Typography noWrap variant="body1" textAlign={"center"}>
+                    Loading...
+                  </Typography>
+                </TableCell>
+              </TableRow>
+            ) : (
+              checkIsExistData
+            )}
           </TableBody>
         </Table>
       </TableContainer>
@@ -50,10 +89,10 @@ const TableTransactions = ({}: {}) => {
         <TableFooter>
           <TableRow>
             <TablePagination
-              rowsPerPageOptions={[50, 100]}
+              rowsPerPageOptions={[100]}
               colSpan={8}
-              count={rowsPerPage}
-              rowsPerPage={rowsPerPage}
+              count={postReportDtos?.totalData as number}
+              rowsPerPage={100}
               page={0}
               slotProps={{
                 select: {
@@ -64,9 +103,7 @@ const TableTransactions = ({}: {}) => {
                 },
               }}
               onPageChange={() => {}}
-              onRowsPerPageChange={(e) => {
-                setRowsPerPage(parseInt(e.target.value));
-              }}
+              onRowsPerPageChange={() => {}}
               ActionsComponent={TablePaginationActions}
             />
           </TableRow>
