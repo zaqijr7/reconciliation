@@ -42,7 +42,7 @@ const Sales = () => {
     const input = document.createElement("input");
 
     input.type = "file";
-    input.accept = ".xlsx";
+    input.accept = ".xlsx, .csv";
     input.style.display = "none";
 
     input.addEventListener("change", () => {
