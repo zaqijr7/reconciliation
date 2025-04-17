@@ -159,7 +159,8 @@ const Sales = () => {
           >
             <Stack>
               <Typography fontWeight={700}>
-                Total Sales POS: Rp. {(4050040).toLocaleString("id-ID")}
+                Total Sales POS: Rp.{" "}
+                {(resultReport?.totalPos || 0).toLocaleString("id-ID")}
               </Typography>
             </Stack>
             <Stack>
