@@ -45,6 +45,18 @@ const RowSubTblTransaction = ({
 
   const open = Boolean(anchorEl);
 
+  const conditionShowStatusRecon = () => {
+    if (data.paymentType === "BANK") {
+      return null;
+    }
+
+    if (getDetailTransaction()?.statusRecon) {
+      return <CheckCircleTwoTone color="success" />;
+    } else {
+      return <CancelTwoTone color="error" />;
+    }
+  };
+
   return (
     <TableRow
       key={data.paymentMethodId}
@@ -102,11 +114,7 @@ const RowSubTblTransaction = ({
 
       <TableCell align="right">
         <Typography variant="subtitle2" fontWeight={600}>
-          {getDetailTransaction()?.statusRecon ? (
-            <CheckCircleTwoTone color="success" />
-          ) : (
-            <CancelTwoTone color="error" />
-          )}
+          {conditionShowStatusRecon()}
         </Typography>
       </TableCell>
       <TableCell align="center">

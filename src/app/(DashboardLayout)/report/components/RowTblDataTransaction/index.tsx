@@ -60,8 +60,7 @@ const RowTblHeadTransaction = ({
     <StyledTableRow>
       <TableCell>
         <Typography noWrap variant="body1">
-          {listBranch.find((item) => item.branchId === data.branch)?.branchName}{" "}
-          {"-"} {data.branch}
+          {listBranch.find((item) => item.branchId === data.branch)?.branchName}
         </Typography>
       </TableCell>
       <TableCell>

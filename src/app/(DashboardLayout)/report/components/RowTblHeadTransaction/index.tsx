@@ -61,7 +61,7 @@ const RowTblHeadTransaction = ({ rightWidth }: { rightWidth: number }) => {
         className="sticky-header"
       >
         <Typography variant="h6" noWrap textAlign={"center"} fontWeight={600}>
-          Status in Agregator Report
+          Status in Aggregator
         </Typography>
       </TableCell>
       <TableCell
