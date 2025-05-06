@@ -9,10 +9,10 @@ import {
   Button,
 } from "@mui/material";
 import PropTypes from "prop-types";
-import Link from "next/link";
 // components
 import Profile from "./Profile";
 import { IconMenu } from "@tabler/icons-react";
+import { useRootStateDispatch } from "../../../RootContext";
 
 interface ItemType {
   toggleMobileSidebar: (event: React.MouseEvent<HTMLElement>) => void;
@@ -21,7 +21,7 @@ interface ItemType {
 const Header = ({ toggleMobileSidebar }: ItemType) => {
   // const lgUp = useMediaQuery((theme) => theme.breakpoints.up('lg'));
   // const lgDown = useMediaQuery((theme) => theme.breakpoints.down('lg'));
-
+  const dispatch = useRootStateDispatch();
   const AppBarStyled = styled(AppBar)(({ theme }) => ({
     boxShadow: "none",
     background: theme.palette.background.paper,
@@ -35,6 +35,12 @@ const Header = ({ toggleMobileSidebar }: ItemType) => {
     width: "100%",
     color: theme.palette.text.secondary,
   }));
+
+  const handleLogout = () => {
+    dispatch({
+      type: "logout",
+    });
+  };
 
   return (
     <AppBarStyled position="sticky" color="default">
@@ -56,15 +62,14 @@ const Header = ({ toggleMobileSidebar }: ItemType) => {
         <Stack spacing={1} direction="row" alignItems="center">
           <Button
             variant="contained"
-            component={Link}
-            href="/authentication/login"
             disableElevation
             color="primary"
             sx={{
               color: "white",
             }}
+            onClick={handleLogout}
           >
-            Login
+            Logout
           </Button>
           <Profile />
         </Stack>

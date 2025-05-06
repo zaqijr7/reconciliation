@@ -211,6 +211,17 @@ const Sales = () => {
         transDate: moment(dateSelected).format("YYYY-MM-DD"),
         branchId: branchSelected,
       });
+
+      const getHistoryTransactionInterval = setInterval(() => {
+        getTransactionHistory.mutate({
+          transDate: moment(dateSelected).format("YYYY-MM-DD"),
+          branchId: branchSelected,
+        });
+      }, 3000);
+
+      return () => {
+        clearInterval(getHistoryTransactionInterval);
+      };
     }
   }, [dateSelected, branchSelected]);
 

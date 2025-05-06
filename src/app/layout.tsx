@@ -8,6 +8,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { RootProvider } from "./RootContext";
+import PrivateRoute from "../utils/PrivateRoute";
 
 const queryClient = new QueryClient();
 
@@ -24,7 +25,9 @@ export default function RootLayout({
           <CssBaseline />
           <LocalizationProvider dateAdapter={AdapterMoment}>
             <QueryClientProvider client={queryClient}>
-              <RootProvider>{children}</RootProvider>
+              <RootProvider>
+                <PrivateRoute>{children}</PrivateRoute>
+              </RootProvider>
             </QueryClientProvider>
           </LocalizationProvider>
         </ThemeProvider>

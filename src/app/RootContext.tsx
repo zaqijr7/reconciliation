@@ -19,6 +19,10 @@ type TypeState = {
     date: Moment | string;
     branch: string;
   };
+  session: {
+    token: string;
+    userId: string;
+  };
 };
 
 // Tipe untuk action reducer
@@ -36,6 +40,18 @@ type Action =
         key: "date" | "branch";
         value: Moment | string;
       };
+    }
+  | {
+      type: "login";
+      payload: {
+        value: {
+          token: string;
+          userId: string;
+        };
+      };
+    }
+  | {
+      type: "logout";
     };
 
 // Initial tasks
@@ -47,6 +63,10 @@ const initialState: TypeState = {
   getInformationReport: {
     date: "",
     branch: "",
+  },
+  session: {
+    token: "",
+    userId: "",
   },
 };
 
@@ -81,6 +101,17 @@ function rootReducer(state: TypeState, action: Action): TypeState {
           [action.payload.key]: action.payload.value,
         },
       };
+    }
+    case "login": {
+      return {
+        ...state,
+        session: {
+          ...action.payload.value,
+        },
+      };
+    }
+    case "logout": {
+      return initialState;
     }
     default: {
       throw new Error("Unknown action: " + (action as any).type);
