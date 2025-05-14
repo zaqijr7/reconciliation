@@ -7,6 +7,7 @@ import {
   Button,
   Stack,
   Checkbox,
+  CircularProgress,
 } from "@mui/material";
 
 import CustomTextField from "@/app/(DashboardLayout)/components/forms/theme-elements/CustomTextField";
@@ -15,6 +16,10 @@ import SnackbarBox, {
   SnackbarBoxRef,
 } from "../../(DashboardLayout)/components/common/SnackBar";
 import { usePathname, useRouter } from "next/navigation";
+import { useMutation } from "@tanstack/react-query";
+import { AxiosResponse } from "axios";
+import fetchApi from "../../../utils/fetchApi";
+import { LoginResponse } from "../../../types/apiTypes";
 
 interface loginType {
   title?: string;
@@ -32,27 +37,47 @@ const AuthLogin = ({ title, subtitle, subtext }: loginType) => {
 
   interface LoginPayload {
     token: string;
-    userId: string;
+    user: string;
   }
+
+  const fetchLogin = useMutation({
+    mutationFn: async (payload: {
+      username: string;
+      password: string;
+    }): Promise<AxiosResponse<LoginResponse, any>> => {
+      const api = await fetchApi();
+      return api.post("/auth/login", payload);
+    },
+    onSuccess: (response) => {
+      if (response.data.status === 200) {
+        dispatch({
+          type: "login",
+          payload: {
+            value: {
+              token: response.data.token,
+              user: response.data.user,
+            } as LoginPayload,
+          },
+        });
+        return;
+      }
+      throw new Error();
+    },
+    onError: () => {
+      snackBarRef.current?.showSnackbar({
+        open: true,
+        severity: "error",
+        message: "Incorrect username or password!",
+      });
+    },
+  });
 
   const checkAccount = (e: CheckAccountEvent) => {
     e.preventDefault();
-    if (username === "admin" && password === "admin") {
-      dispatch({
-        type: "login",
-        payload: {
-          value: {
-            token: "hjsdhjJBJBNKNZXJNJBJB8383pgfnaowyX",
-            userId: "testUser",
-          } as LoginPayload,
-        },
-      });
-    } else {
-      snackBarRef.current?.showSnackbar({
-        open: true,
-        message: "Incorrect username or password!",
-      });
-    }
+    fetchLogin.mutate({
+      username: username,
+      password: password,
+    });
   };
 
   const { session } = useRootState();
@@ -132,9 +157,13 @@ const AuthLogin = ({ title, subtitle, subtext }: loginType) => {
           onClick={checkAccount}
           sx={{
             color: "white",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
           }}
+          disabled={fetchLogin.isPending}
         >
-          Sign In
+          Sign In {fetchLogin.isPending && <CircularProgress size={15} />}
         </Button>
       </Box>
       {subtitle}

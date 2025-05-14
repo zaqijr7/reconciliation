@@ -33,11 +33,16 @@ const Sales = () => {
   const [resultReport, setResultReport] = useState<PostReportDtoPayload | null>(
     null,
   );
+  const rootState = useRootState();
 
   const getListBranch = useMutation({
     mutationFn: async (): Promise<AxiosResponse<GetListBranchType, any>> => {
-      const api = await fetchApi();
-      return api.post("/branch/list", {});
+      const api = await fetchApi({
+        headers: {
+          Authorization: `Bearer ${rootState.session.token}`,
+        },
+      });
+      return api.post("/branch/list", { user: rootState.session.user });
     },
     onSuccess: (response) => {
       if (response.data.result === 200) {
@@ -67,8 +72,15 @@ const Sales = () => {
       offset: number;
       limit: number;
     }): Promise<AxiosResponse<ReportResponseType, any>> => {
-      const api = await fetchApi();
-      return api.post("/recon/report/recon-pos-ecom", data);
+      const api = await fetchApi({
+        headers: {
+          Authorization: `Bearer ${rootState.session.token}`,
+        },
+      });
+      return api.post("/recon/report/recon-pos-ecom", {
+        ...data,
+        user: rootState.session.user,
+      });
     },
     onSuccess: (response) => {
       if (response.data.result === 200) {

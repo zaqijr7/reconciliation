@@ -2,7 +2,7 @@ import axios, { AxiosInstance, AxiosRequestHeaders } from "axios";
 // Define type for custom config
 interface ApiConfig {
   baseURL?: string;
-  headers?: AxiosRequestHeaders;
+  headers?: Partial<AxiosRequestHeaders>;
 }
 
 // Function to create Axios instance dynamically

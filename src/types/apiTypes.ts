@@ -83,3 +83,10 @@ export interface ReportResponseType {
   payload: PostReportDtoPayload;
   result: number;
 }
+
+export interface LoginResponse {
+  token: string;
+  status: number;
+  user: string;
+  result: string;
+}

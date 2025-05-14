@@ -28,6 +28,7 @@ const Sales = () => {
   const [listPaymentMethod, setListPaymentMethod] = useState<
     PaymentType[] | []
   >([]);
+  const rootState = useRootState();
   const snackBarRef = useRef<SnackbarBoxRef>();
   const dispatch = useRootStateDispatch();
   const [transactionHistory, setTransactionHistory] =
@@ -64,7 +65,11 @@ const Sales = () => {
       payload: PaymentSource & { paymentType: string };
       file: File;
     }): Promise<AxiosResponse<GetListBranchType, any>> => {
-      const api = await fetchApi();
+      const api = await fetchApi({
+        headers: {
+          Authorization: `Bearer ${rootState.session.token}`,
+        },
+      });
       const formData = new FormData();
       formData.append("file", file);
       formData.append(
@@ -77,7 +82,10 @@ const Sales = () => {
         }),
       );
 
-      return api.post("/upload/file", formData);
+      return api.post("/upload/file", {
+        ...formData,
+        user: rootState.session.user,
+      });
     },
     onSuccess: () => {
       snackBarRef.current?.showSnackbar({
@@ -98,8 +106,12 @@ const Sales = () => {
 
   const getListBranch = useMutation({
     mutationFn: async (): Promise<AxiosResponse<GetListBranchType, any>> => {
-      const api = await fetchApi();
-      return api.post("/branch/list", {});
+      const api = await fetchApi({
+        headers: {
+          Authorization: `Bearer ${rootState.session.token}`,
+        },
+      });
+      return api.post("/branch/list", { user: rootState.session.user });
     },
     onSuccess: (response) => {
       if (response.data.result === 200) {
@@ -127,8 +139,12 @@ const Sales = () => {
     mutationFn: async (): Promise<
       AxiosResponse<GetListPaymentMehtodType, any>
     > => {
-      const api = await fetchApi();
-      return api.post("/payment/list", {});
+      const api = await fetchApi({
+        headers: {
+          Authorization: `Bearer ${rootState.session.token}`,
+        },
+      });
+      return api.post("/payment/list", { user: rootState.session.user });
     },
     onSuccess: (response) => {
       if (response.data.result === 200) {
@@ -150,8 +166,16 @@ const Sales = () => {
       transDate: string;
       branchId: string;
     }): Promise<AxiosResponse<PaymentTransactionResponse, any>> => {
-      const api = await fetchApi();
-      return api.post("/branch/transactions", { transDate, branchId });
+      const api = await fetchApi({
+        headers: {
+          Authorization: `Bearer ${rootState.session.token}`,
+        },
+      });
+      return api.post("/branch/transactions", {
+        transDate,
+        branchId,
+        user: rootState.session.user,
+      });
     },
     onSuccess: (response) => {
       if (response.data.result === 200) {

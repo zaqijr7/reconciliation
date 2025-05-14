@@ -73,8 +73,16 @@ export default function RootLayout({
       transDate: string;
       branchId: string;
     }): Promise<AxiosResponse<any, any>> => {
-      const api = await fetchApi();
-      return api.post("/rekon/batch", { transDate, branchId });
+      const api = await fetchApi({
+        headers: {
+          Authorization: `Bearer ${rootState.session.token}`,
+        },
+      });
+      return api.post("/rekon/batch", {
+        transDate,
+        branchId,
+        user: rootState.session.user,
+      });
     },
     onSuccess: (response) => {
       if (response.data.result === 200) {

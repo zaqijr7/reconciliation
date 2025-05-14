@@ -21,7 +21,7 @@ type TypeState = {
   };
   session: {
     token: string;
-    userId: string;
+    user: string;
   };
 };
 
@@ -46,7 +46,7 @@ type Action =
       payload: {
         value: {
           token: string;
-          userId: string;
+          user: string;
         };
       };
     }
@@ -66,7 +66,7 @@ const initialState: TypeState = {
   },
   session: {
     token: "",
-    userId: "",
+    user: "",
   },
 };
 
