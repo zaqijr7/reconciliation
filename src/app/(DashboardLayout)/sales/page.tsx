@@ -79,13 +79,11 @@ const Sales = () => {
           branchId: branchSelected,
           transDate: moment(dateSelected).format("YYYY-MM-DD"),
           paymentType: payload.paymentType,
+          user: rootState.session.user,
         }),
       );
 
-      return api.post("/upload/file", {
-        ...formData,
-        user: rootState.session.user,
-      });
+      return api.post("/upload/file", formData);
     },
     onSuccess: () => {
       snackBarRef.current?.showSnackbar({
@@ -266,7 +264,7 @@ const Sales = () => {
             paymentSelected={
               uploadFile.variables?.payload?.paymentMethodId as string
             }
-            isLoading={uploadFile.isPending || getTransactionHistory.isPending}
+            isLoading={uploadFile.isPending}
             transactionHistoryData={transactionHistory}
           />
         </>
