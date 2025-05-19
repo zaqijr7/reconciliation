@@ -26,7 +26,7 @@ type TypeState = {
 };
 
 // Tipe untuk action reducer
-type Action =
+export type Action =
   | {
       type: "changed";
       payload: {

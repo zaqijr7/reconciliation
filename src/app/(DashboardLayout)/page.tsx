@@ -47,6 +47,7 @@ const Dashboard = () => {
         headers: {
           Authorization: `Bearer ${rootState.session.token}`,
         },
+        dispatch,
       });
       return api.post("/branch/dashboard", {
         branchId,
@@ -71,6 +72,7 @@ const Dashboard = () => {
         headers: {
           Authorization: `Bearer ${rootState.session.token}`,
         },
+        dispatch,
       });
       return api.post("/branch/list", { user: rootState.session.user });
     },

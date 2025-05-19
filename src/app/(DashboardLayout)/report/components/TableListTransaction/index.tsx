@@ -19,6 +19,8 @@ const TableTransactions = ({
   isLoading,
   postReportDtos,
   listBranch,
+  paginationPayload,
+  onPageChange,
 }: {
   isLoading: boolean;
   postReportDtos: PostReportDtoPayload | null;
@@ -28,6 +30,15 @@ const TableTransactions = ({
         branchId: string;
         branchName: string;
       }[];
+  paginationPayload: {
+    offset: number;
+    limit: number;
+  };
+  totalDataPerPage: number;
+  onPageChange: (
+    event: React.MouseEvent<HTMLButtonElement> | null,
+    page: number,
+  ) => void;
 }) => {
   const [rightWidth, setRightWidth] = useState(0);
 
@@ -91,9 +102,9 @@ const TableTransactions = ({
             <TablePagination
               rowsPerPageOptions={[100]}
               colSpan={8}
-              count={postReportDtos?.totalData as number}
+              count={(postReportDtos?.totalData || 0) as number}
               rowsPerPage={100}
-              page={0}
+              page={Math.ceil(paginationPayload.offset / 100)}
               slotProps={{
                 select: {
                   inputProps: {
@@ -102,7 +113,7 @@ const TableTransactions = ({
                   native: true,
                 },
               }}
-              onPageChange={() => {}}
+              onPageChange={onPageChange}
               onRowsPerPageChange={() => {}}
               ActionsComponent={TablePaginationActions}
             />

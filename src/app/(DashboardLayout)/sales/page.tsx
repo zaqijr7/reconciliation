@@ -69,6 +69,7 @@ const Sales = () => {
         headers: {
           Authorization: `Bearer ${rootState.session.token}`,
         },
+        dispatch,
       });
       const formData = new FormData();
       formData.append("file", file);
@@ -108,6 +109,7 @@ const Sales = () => {
         headers: {
           Authorization: `Bearer ${rootState.session.token}`,
         },
+        dispatch,
       });
       return api.post("/branch/list", { user: rootState.session.user });
     },
@@ -141,6 +143,7 @@ const Sales = () => {
         headers: {
           Authorization: `Bearer ${rootState.session.token}`,
         },
+        dispatch,
       });
       return api.post("/payment/list", { user: rootState.session.user });
     },
@@ -168,6 +171,7 @@ const Sales = () => {
         headers: {
           Authorization: `Bearer ${rootState.session.token}`,
         },
+        dispatch,
       });
       return api.post("/branch/transactions", {
         transDate,

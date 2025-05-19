@@ -8,8 +8,6 @@ const PrivateRoute = ({ children }) => {
   const pathname = usePathname();
 
   useEffect(() => {
-    console.log("pathname", pathname);
-
     if (!session?.token) {
       router.push("/authentication/login");
     }

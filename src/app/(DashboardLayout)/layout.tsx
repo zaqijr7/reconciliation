@@ -15,7 +15,7 @@ import React, { Ref, useRef, useState } from "react";
 import Header from "@/app/(DashboardLayout)/layout/header/Header";
 import Sidebar from "@/app/(DashboardLayout)/layout/sidebar/Sidebar";
 import { usePathname } from "next/navigation";
-import { useRootState } from "../RootContext";
+import { useRootState, useRootStateDispatch } from "../RootContext";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosResponse } from "axios";
 import fetchApi from "../../utils/fetchApi";
@@ -64,7 +64,7 @@ export default function RootLayout({
   const handleClose = () => setOpen(false);
   const handleOpen = () => setOpen(true);
   const snackBarRef = useRef<SnackbarBoxRef>();
-
+  const dispatch = useRootStateDispatch();
   const submitTransaction = useMutation({
     mutationFn: async ({
       transDate,
@@ -77,6 +77,7 @@ export default function RootLayout({
         headers: {
           Authorization: `Bearer ${rootState.session.token}`,
         },
+        dispatch,
       });
       return api.post("/rekon/batch", {
         transDate,

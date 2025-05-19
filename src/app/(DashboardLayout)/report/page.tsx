@@ -33,6 +33,10 @@ const Sales = () => {
   const [resultReport, setResultReport] = useState<PostReportDtoPayload | null>(
     null,
   );
+  const [paginationPayload, setPaginationPayload] = useState({
+    offset: 0,
+    limit: 100,
+  });
   const rootState = useRootState();
 
   const getListBranch = useMutation({
@@ -41,6 +45,7 @@ const Sales = () => {
         headers: {
           Authorization: `Bearer ${rootState.session.token}`,
         },
+        dispatch,
       });
       return api.post("/branch/list", { user: rootState.session.user });
     },
@@ -76,6 +81,7 @@ const Sales = () => {
         headers: {
           Authorization: `Bearer ${rootState.session.token}`,
         },
+        dispatch,
       });
       return api.post("/recon/report/recon-pos-ecom", {
         ...data,
@@ -96,6 +102,10 @@ const Sales = () => {
   });
 
   const handleDateSelected = (value: Moment | null) => {
+    setPaginationPayload({
+      offset: 0,
+      limit: 100,
+    });
     dispatch({
       type: "changedStateReport",
       payload: {
@@ -114,6 +124,10 @@ const Sales = () => {
         value: value.target.value,
       },
     });
+    setPaginationPayload({
+      offset: 0,
+      limit: 100,
+    });
     setResultReport(null);
   };
 
@@ -130,13 +144,24 @@ const Sales = () => {
     }
   }, []);
 
-  const getDataReport = () => {
+  const getDataReport = (pagination: { offset: number; limit: number }) => {
     getListReportReconPosVsEcom.mutate({
       transDate: moment(dateSelected).format("YYYY-MM-DD"),
       branchId: branchSelected,
-      offset: 0,
-      limit: 100,
+      ...pagination,
     });
+  };
+
+  const onPageChange = (
+    _: React.MouseEvent<HTMLButtonElement> | null,
+    page: number,
+  ) => {
+    const data = {
+      ...paginationPayload,
+      offset: 100 * page,
+    };
+    setPaginationPayload(data);
+    getDataReport(data);
   };
 
   useEffect(() => {
@@ -182,7 +207,7 @@ const Sales = () => {
                 sx={{
                   color: "white",
                 }}
-                onClick={getDataReport}
+                onClick={() => getDataReport(paginationPayload)}
                 disabled={
                   getListReportReconPosVsEcom.isPending ||
                   !branchSelected ||
@@ -202,7 +227,12 @@ const Sales = () => {
           <TableListTransaction
             isLoading={getListReportReconPosVsEcom.isPending}
             postReportDtos={resultReport}
+            totalDataPerPage={
+              resultReport?.postReportDtos?.length || (0 as number)
+            }
             listBranch={listBranch}
+            paginationPayload={paginationPayload}
+            onPageChange={onPageChange}
           />
         </>
       </DashboardCard>
