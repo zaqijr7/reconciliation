@@ -19,6 +19,10 @@ type TypeState = {
     date: Moment | string;
     branch: string;
   };
+  getDashboadReport: {
+    date: Moment | string;
+    branch: string;
+  };
   session: {
     token: string;
     user: string;
@@ -36,6 +40,13 @@ export type Action =
     }
   | {
       type: "changedStateReport";
+      payload: {
+        key: "date" | "branch";
+        value: Moment | string;
+      };
+    }
+  | {
+      type: "changedStateDasboard";
       payload: {
         key: "date" | "branch";
         value: Moment | string;
@@ -61,6 +72,10 @@ const initialState: TypeState = {
     branch: "",
   },
   getInformationReport: {
+    date: "",
+    branch: "",
+  },
+  getDashboadReport: {
     date: "",
     branch: "",
   },
@@ -98,6 +113,15 @@ function rootReducer(state: TypeState, action: Action): TypeState {
         ...state,
         getInformationReport: {
           ...state.getInformationReport,
+          [action.payload.key]: action.payload.value,
+        },
+      };
+    }
+    case "changedStateDasboard": {
+      return {
+        ...state,
+        getDashboadReport: {
+          ...state.getDashboadReport,
           [action.payload.key]: action.payload.value,
         },
       };

@@ -7,6 +7,7 @@ import {
   Select,
   MenuItem,
   Stack,
+  SelectChangeEvent,
 } from "@mui/material";
 import PageContainer from "@/app/(DashboardLayout)/components/container/PageContainer";
 // components
@@ -15,18 +16,18 @@ import YearlyBreakup from "@/app/(DashboardLayout)/components/dashboard/YearlyBr
 import ProductPerformance from "@/app/(DashboardLayout)/components/dashboard/ProductPerformance";
 import TotalIncome from "@/app/(DashboardLayout)/components/dashboard/TotalIncome";
 import { DatePicker } from "@mui/x-date-pickers";
-import moment from "moment";
+import moment, { Moment } from "moment";
 import { useRootState, useRootStateDispatch } from "../RootContext";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosResponse } from "axios";
 import fetchApi from "../../utils/fetchApi";
 import { useEffect, useState } from "react";
-import { GetListBranchType } from "../../types/apiTypes";
+import { DashboardResponseApi, GetListBranchType } from "../../types/apiTypes";
 
 const Dashboard = () => {
   const rootState = useRootState();
   const dispatch = useRootStateDispatch();
-  const { getInformationRecon } = useRootState();
+  const { getDashboadReport } = useRootState();
   const [listBranch, setListBranch] = useState<
     { branchId: string; branchName: string }[] | []
   >([]);
@@ -42,7 +43,7 @@ const Dashboard = () => {
       branchId: string;
       startDate: string;
       endDate: string;
-    }): Promise<AxiosResponse<any, any>> => {
+    }): Promise<AxiosResponse<DashboardResponseApi, any>> => {
       const api = await fetchApi({
         headers: {
           Authorization: `Bearer ${rootState.session.token}`,
@@ -79,9 +80,9 @@ const Dashboard = () => {
     onSuccess: (response) => {
       if (response.data.result === 200) {
         setListBranch(response.data.payload);
-        if (!getInformationRecon.branch) {
+        if (!getDashboadReport.branch) {
           dispatch({
-            type: "changed",
+            type: "changedStateDasboard",
             payload: {
               key: "branch",
               value: response.data.payload[0].branchId,
@@ -100,16 +101,36 @@ const Dashboard = () => {
 
   useEffect(() => {
     getListBranch.mutate();
-    if (!getInformationRecon.dateTransaction) {
+    if (!getDashboadReport.date) {
       dispatch({
-        type: "changed",
+        type: "changedStateDasboard",
         payload: {
-          key: "dateTransaction",
+          key: "date",
           value: moment(Date.now()),
         },
       });
     }
   }, []);
+
+  const handleDateSelected = (value: Moment | null) => {
+    dispatch({
+      type: "changedStateDasboard",
+      payload: {
+        key: "date",
+        value: value as Moment,
+      },
+    });
+  };
+
+  const handleSelectedBranch = (value: SelectChangeEvent<string>) => {
+    dispatch({
+      type: "changedStateDasboard",
+      payload: {
+        key: "branch",
+        value: value.target.value,
+      },
+    });
+  };
 
   useEffect(() => {
     if (branchSelected || dateSelected) {
@@ -122,14 +143,12 @@ const Dashboard = () => {
   }, [branchSelected, dateSelected]);
 
   useEffect(() => {
-    console.log(getInformationRecon.dateTransaction, "<<< test");
-
-    setDateSelected(moment(getInformationRecon.dateTransaction));
-  }, [getInformationRecon.dateTransaction]);
+    setDateSelected(moment(getDashboadReport.date));
+  }, [getDashboadReport.date]);
 
   useEffect(() => {
-    setBranchSelected(getInformationRecon.branch as string);
-  }, [getInformationRecon.branch]);
+    setBranchSelected(getDashboadReport.branch as string);
+  }, [getDashboadReport.branch]);
 
   return (
     <PageContainer title="Dashboard" description="this is Dashboard">
@@ -139,13 +158,15 @@ const Dashboard = () => {
             <Stack flexDirection={"row"}>
               <DatePicker
                 label="Tanggal"
-                value={moment(Date.now())}
+                value={moment(dateSelected)}
                 sx={{
                   borderColor: "divider",
                   marginBottom: 3,
                   width: 250,
                   marginRight: 3,
                 }}
+                onChange={(e) => handleDateSelected(e)}
+                format="DD/MM/YYYY"
               />
               <FormControl sx={{ width: 250 }}>
                 <InputLabel id="demo-simple-select-label">Branch</InputLabel>
@@ -154,7 +175,7 @@ const Dashboard = () => {
                   id="demo-simple-select"
                   value={branchSelected}
                   label="Branch"
-                  onChange={() => ""}
+                  onChange={(e) => handleSelectedBranch(e)}
                 >
                   {listBranch?.map((item) => {
                     return (
@@ -181,7 +202,10 @@ const Dashboard = () => {
             </Grid>
           </Grid>
           <Grid item xs={12} lg={12}>
-            <ProductPerformance />
+            <ProductPerformance
+              loading={getDataTable.isPending}
+              data={getDataTable.data?.data?.payload?.transactionList || []}
+            />
           </Grid>
         </Grid>
       </Box>

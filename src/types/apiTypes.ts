@@ -90,3 +90,25 @@ export interface LoginResponse {
   user: string;
   result: string;
 }
+
+// Transaction Interface
+export interface DashboardTransaction {
+  transactionSource: string;
+  amount: number;
+  paymentId: string;
+}
+
+// Payload Interface
+export interface DashboardPayload {
+  branchId: string;
+  transactionList: DashboardTransaction[];
+  allGross: number;
+  allNet: number;
+}
+
+// Main Response Interface
+export interface DashboardResponseApi {
+  result: number;
+  message: string;
+  payload: DashboardPayload;
+}

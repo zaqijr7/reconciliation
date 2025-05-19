@@ -6,43 +6,23 @@ import {
   TableCell,
   TableHead,
   TableRow,
-  Collapse,
-  IconButton,
   TableContainer,
   Stack,
 } from "@mui/material";
 import DashboardCard from "@/app/(DashboardLayout)//components/shared/DashboardCard";
 import * as React from "react";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+import { DashboardTransaction } from "../../../../types/apiTypes";
 
-function createData(name: string, amount: number) {
-  return {
-    name,
-    amount,
-    history: [
-      {
-        source: "Bank Central Asia (BCA)",
-        amount: 600000,
-      },
-      {
-        source: "Bank Rakyat Indonesia",
-        amount: 500000,
-      },
-    ],
-  };
-}
-
-function Row(props: { row: ReturnType<typeof createData> }) {
+function Row(props: { row: DashboardTransaction }) {
   const { row } = props;
-  const [open, setOpen] = React.useState(false);
+  // const [open, setOpen] = React.useState(false);
 
   return (
     <React.Fragment>
       <TableRow sx={{ "& > *": { borderBottom: "unset" } }}>
         <TableCell component="th">
           <Stack direction={"row"} alignItems={"center"}>
-            <IconButton
+            {/* <IconButton
               sx={{ marginRight: 2 }}
               aria-label="expand row"
               size="small"
@@ -50,9 +30,9 @@ function Row(props: { row: ReturnType<typeof createData> }) {
               accessKey=""
             >
               {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-            </IconButton>
+            </IconButton> */}
             <Typography variant="subtitle2" fontWeight={600}>
-              {row.name}
+              {row.transactionSource}
             </Typography>
           </Stack>
         </TableCell>
@@ -62,7 +42,7 @@ function Row(props: { row: ReturnType<typeof createData> }) {
           </Typography>
         </TableCell>
       </TableRow>
-      <TableRow>
+      {/* <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
           <Collapse in={open} timeout="auto" unmountOnExit>
             <Box sx={{ margin: 1 }}>
@@ -91,22 +71,23 @@ function Row(props: { row: ReturnType<typeof createData> }) {
             </Box>
           </Collapse>
         </TableCell>
-      </TableRow>
+      </TableRow> */}
     </React.Fragment>
   );
 }
-const rows = [
-  createData("Debit Card", 4500000),
-  createData("Credit Card", 4300000),
-  createData("E- commerce", 3000000),
-];
 
-const DetailTransaction = () => {
+const DetailTransaction = ({
+  data,
+  loading,
+}: {
+  data: DashboardTransaction[];
+  loading: boolean;
+}) => {
   return (
     <DashboardCard title="Amount Transaction">
       <Box sx={{ overflow: "auto", width: { xs: "280px", sm: "auto" } }}>
         <TableContainer>
-          <Table aria-label="collapsible table">
+          <Table>
             <TableHead>
               <TableRow>
                 <TableCell>
@@ -121,11 +102,23 @@ const DetailTransaction = () => {
                 </TableCell>
               </TableRow>
             </TableHead>
-            <TableBody>
-              {rows.map((row) => (
-                <Row key={row.name} row={row} />
-              ))}
-            </TableBody>
+            {loading ? (
+              <TableBody>
+                <TableRow>
+                  <TableCell colSpan={2} align="center">
+                    <Typography variant="subtitle2" fontWeight={600}>
+                      Loading...
+                    </Typography>
+                  </TableCell>
+                </TableRow>
+              </TableBody>
+            ) : (
+              <TableBody>
+                {data.map((row) => (
+                  <Row key={row.paymentId} row={row} />
+                ))}
+              </TableBody>
+            )}
           </Table>
         </TableContainer>
       </Box>
