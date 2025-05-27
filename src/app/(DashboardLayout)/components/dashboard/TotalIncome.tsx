@@ -1,11 +1,10 @@
 import dynamic from "next/dynamic";
 const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
 import { useTheme } from "@mui/material/styles";
-import { Stack, Typography, Avatar } from "@mui/material";
-import { IconArrowDownRight } from "@tabler/icons-react";
+import { Typography } from "@mui/material";
 import DashboardCard from "@/app/(DashboardLayout)/components/shared/DashboardCard";
 
-const TotalIncome = () => {
+const TotalIncome = ({ allNet }: { allNet: number }) => {
   // chart color
   const theme = useTheme();
   const secondary = theme.palette.secondary.main;
@@ -77,9 +76,9 @@ const TotalIncome = () => {
     >
       <>
         <Typography variant="h3" fontWeight="700" mt="-20px">
-          Rp. 3.000.000
+          Rp. {allNet.toLocaleString()}
         </Typography>
-        <Stack direction="row" spacing={1} my={1} alignItems="center">
+        {/* <Stack direction="row" spacing={1} my={1} alignItems="center">
           <Avatar sx={{ bgcolor: errorlight, width: 27, height: 27 }}>
             <IconArrowDownRight width={20} color="#FA896B" />
           </Avatar>
@@ -89,7 +88,7 @@ const TotalIncome = () => {
           <Typography variant="subtitle2" color="textSecondary">
             last week
           </Typography>
-        </Stack>
+        </Stack> */}
       </>
     </DashboardCard>
   );

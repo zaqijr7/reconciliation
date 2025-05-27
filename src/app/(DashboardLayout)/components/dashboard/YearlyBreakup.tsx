@@ -1,17 +1,22 @@
 import dynamic from "next/dynamic";
 const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
 import { useTheme } from "@mui/material/styles";
-import { Grid, Stack, Typography, Avatar } from "@mui/material";
-import { IconArrowUpLeft } from "@tabler/icons-react";
+import { Grid, Typography } from "@mui/material";
 
 import DashboardCard from "@/app/(DashboardLayout)/components/shared/DashboardCard";
+import { DashboardTransaction } from "../../../../types/apiTypes";
 
-const YearlyBreakup = () => {
+const YearlyBreakup = ({
+  allGros,
+  allTransaction,
+}: {
+  allGros: number;
+  allTransaction: DashboardTransaction[] | [];
+}) => {
   // chart color
   const theme = useTheme();
   const primary = theme.palette.primary.main;
   const primarylight = "#ecf2ff";
-  const successlight = theme.palette.success.light;
   const renang = theme.palette.error.dark;
 
   // chart
@@ -36,7 +41,7 @@ const YearlyBreakup = () => {
         },
       },
     },
-    labels: ["Sepak Bola", "Volly", "Lainnya", "Renang"],
+    labels: allTransaction.map((item) => item.transactionSource) || [],
     tooltip: {
       theme: theme.palette.mode === "dark" ? "dark" : "light",
       fillSeriesColor: false,
@@ -61,7 +66,6 @@ const YearlyBreakup = () => {
       },
     ],
   };
-  const seriescolumnchart: any = [38, 40, 25, 50];
 
   return (
     <DashboardCard title="Total Sales">
@@ -70,7 +74,7 @@ const YearlyBreakup = () => {
         <Grid item xs={12} sm={12} justifyContent={"center"}>
           <Chart
             options={optionscolumnchart}
-            series={seriescolumnchart}
+            series={allTransaction.map((item) => item.amount) || []}
             type="donut"
             height={150}
             width={"100%"}
@@ -79,9 +83,9 @@ const YearlyBreakup = () => {
         {/* column */}
         <Grid item xs={12} sm={12}>
           <Typography variant="h3" fontWeight="700">
-            Rp. 4.000.000
+            Rp. {allGros.toLocaleString()}
           </Typography>
-          <Stack direction="row" spacing={1} mt={1} alignItems="center">
+          {/* <Stack direction="row" spacing={1} mt={1} alignItems="center">
             <Avatar sx={{ bgcolor: successlight, width: 27, height: 27 }}>
               <IconArrowUpLeft width={20} color="#39B69A" />
             </Avatar>
@@ -91,7 +95,7 @@ const YearlyBreakup = () => {
             <Typography variant="subtitle2" color="textSecondary">
               yesterday
             </Typography>
-          </Stack>
+          </Stack> */}
         </Grid>
       </Grid>
     </DashboardCard>

@@ -11,7 +11,6 @@ import {
 } from "@mui/material";
 import PageContainer from "@/app/(DashboardLayout)/components/container/PageContainer";
 // components
-import SalesOverview from "@/app/(DashboardLayout)/components/dashboard/SalesOverview";
 import YearlyBreakup from "@/app/(DashboardLayout)/components/dashboard/YearlyBreakup";
 import ProductPerformance from "@/app/(DashboardLayout)/components/dashboard/ProductPerformance";
 import TotalIncome from "@/app/(DashboardLayout)/components/dashboard/TotalIncome";
@@ -136,8 +135,10 @@ const Dashboard = () => {
     if (branchSelected || dateSelected) {
       getDataTable.mutate({
         branchId: branchSelected,
-        startDate: moment(dateSelected).format("YYYY-MM-DD"),
-        endDate: moment(dateSelected).subtract(7, "days").format("YYYY-MM-DD"),
+        startDate: moment(dateSelected)
+          .subtract(7, "days")
+          .format("YYYY-MM-DD"),
+        endDate: moment(dateSelected).format("YYYY-MM-DD"),
       });
     }
   }, [branchSelected, dateSelected]);
@@ -189,23 +190,27 @@ const Dashboard = () => {
             </Stack>
           </Grid>
           <Grid item xs={12} lg={8}>
-            <SalesOverview />
-          </Grid>
-          <Grid item xs={12} lg={4}>
-            <Grid container spacing={3}>
-              <Grid item xs={12}>
-                <YearlyBreakup />
-              </Grid>
-              <Grid item xs={12}>
-                <TotalIncome />
-              </Grid>
-            </Grid>
-          </Grid>
-          <Grid item xs={12} lg={12}>
             <ProductPerformance
               loading={getDataTable.isPending}
               data={getDataTable.data?.data?.payload?.transactionList || []}
             />
+          </Grid>
+          <Grid item xs={12} lg={4}>
+            <Grid container spacing={3}>
+              <Grid item xs={12}>
+                <YearlyBreakup
+                  allGros={getDataTable.data?.data?.payload?.allGross || 0}
+                  allTransaction={
+                    getDataTable.data?.data?.payload?.transactionList || []
+                  }
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TotalIncome
+                  allNet={getDataTable.data?.data?.payload?.allNet || 0}
+                />
+              </Grid>
+            </Grid>
           </Grid>
         </Grid>
       </Box>
