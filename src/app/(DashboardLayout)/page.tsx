@@ -31,7 +31,11 @@ const Dashboard = () => {
     { branchId: string; branchName: string }[] | []
   >([]);
   const [branchSelected, setBranchSelected] = useState("");
-  const [dateSelected, setDateSelected] = useState<moment.Moment | null>(null);
+  const [dateSelectedStart, setDateSelectedStart] =
+    useState<moment.Moment | null>(null);
+  const [dateSelectedEnd, setDateSelectedEnd] = useState<moment.Moment | null>(
+    null,
+  );
 
   const getDataTable = useMutation({
     mutationFn: async ({
@@ -100,22 +104,34 @@ const Dashboard = () => {
 
   useEffect(() => {
     getListBranch.mutate();
-    if (!getDashboadReport.date) {
+    if (!getDashboadReport.dateStart) {
       dispatch({
         type: "changedStateDasboard",
         payload: {
-          key: "date",
+          key: "dateStart",
+          value: moment(Date.now()),
+        },
+      });
+    }
+    if (!getDashboadReport.dateEnd) {
+      dispatch({
+        type: "changedStateDasboard",
+        payload: {
+          key: "dateEnd",
           value: moment(Date.now()),
         },
       });
     }
   }, []);
 
-  const handleDateSelected = (value: Moment | null) => {
+  const handleDateSelected = (
+    value: Moment | null,
+    key: "dateStart" | "dateEnd",
+  ) => {
     dispatch({
       type: "changedStateDasboard",
       payload: {
-        key: "date",
+        key,
         value: value as Moment,
       },
     });
@@ -132,20 +148,19 @@ const Dashboard = () => {
   };
 
   useEffect(() => {
-    if (branchSelected || dateSelected) {
+    if (branchSelected || dateSelectedStart || dateSelectedEnd) {
       getDataTable.mutate({
         branchId: branchSelected,
-        startDate: moment(dateSelected)
-          .subtract(7, "days")
-          .format("YYYY-MM-DD"),
-        endDate: moment(dateSelected).format("YYYY-MM-DD"),
+        startDate: moment(dateSelectedStart).format("YYYY-MM-DD"),
+        endDate: moment(dateSelectedEnd).format("YYYY-MM-DD"),
       });
     }
-  }, [branchSelected, dateSelected]);
+  }, [branchSelected, dateSelectedStart, dateSelectedEnd]);
 
   useEffect(() => {
-    setDateSelected(moment(getDashboadReport.date));
-  }, [getDashboadReport.date]);
+    setDateSelectedStart(moment(getDashboadReport.dateStart));
+    setDateSelectedEnd(moment(getDashboadReport.dateEnd));
+  }, [getDashboadReport.dateStart, getDashboadReport.dateEnd]);
 
   useEffect(() => {
     setBranchSelected(getDashboadReport.branch as string);
@@ -158,15 +173,27 @@ const Dashboard = () => {
           <Grid item xs={12} lg={8}>
             <Stack flexDirection={"row"}>
               <DatePicker
-                label="Tanggal"
-                value={moment(dateSelected)}
+                label="Start Date"
+                value={moment(dateSelectedStart)}
                 sx={{
                   borderColor: "divider",
                   marginBottom: 3,
                   width: 250,
                   marginRight: 3,
                 }}
-                onChange={(e) => handleDateSelected(e)}
+                onChange={(e) => handleDateSelected(e, "dateStart")}
+                format="DD/MM/YYYY"
+              />
+              <DatePicker
+                label="To Date"
+                value={moment(dateSelectedEnd)}
+                sx={{
+                  borderColor: "divider",
+                  marginBottom: 3,
+                  width: 250,
+                  marginRight: 3,
+                }}
+                onChange={(e) => handleDateSelected(e, "dateEnd")}
                 format="DD/MM/YYYY"
               />
               <FormControl sx={{ width: 250 }}>

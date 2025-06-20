@@ -20,7 +20,8 @@ type TypeState = {
     branch: string;
   };
   getDashboadReport: {
-    date: Moment | string;
+    dateStart: Moment | string;
+    dateEnd: Moment | string;
     branch: string;
   };
   session: {
@@ -48,7 +49,7 @@ export type Action =
   | {
       type: "changedStateDasboard";
       payload: {
-        key: "date" | "branch";
+        key: "dateStart" | "dateEnd" | "branch";
         value: Moment | string;
       };
     }
@@ -76,7 +77,8 @@ const initialState: TypeState = {
     branch: "",
   },
   getDashboadReport: {
-    date: "",
+    dateStart: "",
+    dateEnd: "",
     branch: "",
   },
   session: {
