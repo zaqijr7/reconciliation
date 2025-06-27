@@ -79,7 +79,10 @@ const Sales = () => {
           pmId: payload.paymentMethodId,
           branchId: branchSelected,
           transDate: moment(dateSelected).format("YYYY-MM-DD"),
-          paymentType: payload.paymentType,
+          paymentType:
+            payload.paymentType === "DIGITAL - QRIS"
+              ? "ESB"
+              : payload.paymentType,
           user: rootState.session.user,
         }),
       );
